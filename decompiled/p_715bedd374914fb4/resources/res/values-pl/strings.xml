@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Anuluj</string>
+    <string name="__arcore_continue">Dalej</string>
+    <string name="__arcore_install_app">Ta aplikacja wymaga najnowszej wersji Usług Google Play dla AR.</string>
+    <string name="__arcore_install_feature">Ta funkcja wymaga najnowszej wersji Usług Google Play dla AR.</string>
+    <string name="__arcore_installing">Instaluję Usługi Google Play dla AR…</string>
+    <string name="call_notification_answer_action">Odbierz</string>
+    <string name="call_notification_answer_video_action">Wideo</string>
+    <string name="call_notification_decline_action">Odrzuć</string>
+    <string name="call_notification_hang_up_action">Rozłącz</string>
+    <string name="call_notification_incoming_text">Połączenie przychodzące</string>
+    <string name="call_notification_ongoing_text">Trwa połączenie</string>
+    <string name="call_notification_screening_text">Filtruję połączenie przychodzące</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

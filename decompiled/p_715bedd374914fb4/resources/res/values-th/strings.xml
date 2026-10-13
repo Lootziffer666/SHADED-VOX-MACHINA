@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">ยกเลิก</string>
+    <string name="__arcore_continue">ต่อไป</string>
+    <string name="__arcore_install_app">แอปพลิเคชันนี้ต้องใช้บริการ Google Play สำหรับ AR เวอร์ชันล่าสุด</string>
+    <string name="__arcore_install_feature">ฟีเจอร์นี้ต้องใช้บริการ Google Play สำหรับ AR เวอร์ชันล่าสุด</string>
+    <string name="__arcore_installing">กำลังติดตั้งบริการ Google Play สำหรับ AR…</string>
+    <string name="call_notification_answer_action">รับสาย</string>
+    <string name="call_notification_answer_video_action">วิดีโอ</string>
+    <string name="call_notification_decline_action">ปฏิเสธ</string>
+    <string name="call_notification_hang_up_action">วางสาย</string>
+    <string name="call_notification_incoming_text">สายเรียกเข้า</string>
+    <string name="call_notification_ongoing_text">สายที่สนทนาอยู่</string>
+    <string name="call_notification_screening_text">กำลังสกรีนสายเรียกเข้า</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

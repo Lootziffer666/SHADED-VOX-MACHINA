@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Отмена</string>
+    <string name="__arcore_continue">Далее</string>
+    <string name="__arcore_install_app">Для работы этого приложения нужна последняя версия сервисов Google Play для AR.</string>
+    <string name="__arcore_install_feature">Для работы этой функции нужна последняя версия сервисов Google Play для AR.</string>
+    <string name="__arcore_installing">Установка сервисов Google Play для AR…</string>
+    <string name="call_notification_answer_action">Ответить</string>
+    <string name="call_notification_answer_video_action">Видео</string>
+    <string name="call_notification_decline_action">Отклонить</string>
+    <string name="call_notification_hang_up_action">Завершить</string>
+    <string name="call_notification_incoming_text">Входящий вызов</string>
+    <string name="call_notification_ongoing_text">Текущий вызов</string>
+    <string name="call_notification_screening_text">Фильтрация входящего вызова</string>
+    <string name="status_bar_notification_info_overflow">&gt;999</string>
+</resources>

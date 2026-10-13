@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">キャンセル</string>
+    <string name="__arcore_continue">続行</string>
+    <string name="__arcore_install_app">このアプリを使用するには、最新バージョンの Google Play 開発者サービス（AR）が必要です。</string>
+    <string name="__arcore_install_feature">この機能を使用するには、最新バージョンの Google Play 開発者サービス（AR）が必要です。</string>
+    <string name="__arcore_installing">Google Play 開発者サービス（AR）をインストールしています…</string>
+    <string name="call_notification_answer_action">応答</string>
+    <string name="call_notification_answer_video_action">ビデオ</string>
+    <string name="call_notification_decline_action">拒否</string>
+    <string name="call_notification_hang_up_action">通話終了</string>
+    <string name="call_notification_incoming_text">着信</string>
+    <string name="call_notification_ongoing_text">通話中</string>
+    <string name="call_notification_screening_text">着信をスクリーニング中</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

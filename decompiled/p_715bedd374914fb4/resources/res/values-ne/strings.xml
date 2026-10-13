@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">रद्द गर्नुहोस्</string>
+    <string name="__arcore_continue">जारी राख्नुहोस्</string>
+    <string name="__arcore_install_app">यो एप चलाउन AR का लागि Google Play सेवाको नवीनतम संस्करण चाहिन्छ।</string>
+    <string name="__arcore_install_feature">यो सुविधा चलाउन AR का लागि Google Play सेवाको नवीनतम संस्करण चाहिन्छ।</string>
+    <string name="__arcore_installing">AR का लागि Google Play सेवा गर्दै…</string>
+    <string name="call_notification_answer_action">जवाफ दिनुहोस्</string>
+    <string name="call_notification_answer_video_action">भिडियो</string>
+    <string name="call_notification_decline_action">काट्नुहोस्</string>
+    <string name="call_notification_hang_up_action">फोन राख्नुहोस्</string>
+    <string name="call_notification_incoming_text">आगमन कल</string>
+    <string name="call_notification_ongoing_text">भइरहेको कल</string>
+    <string name="call_notification_screening_text">आगमन कल जाँचिँदै छ</string>
+    <string name="status_bar_notification_info_overflow">९९९+</string>
+</resources>

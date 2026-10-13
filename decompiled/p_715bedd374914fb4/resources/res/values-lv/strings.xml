@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Atcelt</string>
+    <string name="__arcore_continue">Tālāk</string>
+    <string name="__arcore_install_app">Lai izmantotu šo lietojumprogrammu, ir nepieciešama jaunākā Google Play PR pakalpojumu versija.</string>
+    <string name="__arcore_install_feature">Lai izmantotu šo funkciju, ir nepieciešama jaunākā Google Play PR pakalpojumu versija.</string>
+    <string name="__arcore_installing">Notiek Google Play PR pakalpojumu instalēšana…</string>
+    <string name="call_notification_answer_action">Atbildēt</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Noraidīt</string>
+    <string name="call_notification_hang_up_action">Pārtraukt</string>
+    <string name="call_notification_incoming_text">Ienākošais zvans</string>
+    <string name="call_notification_ongoing_text">Pašreizējais zvans</string>
+    <string name="call_notification_screening_text">Ienākošā zvana filtrēšana</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

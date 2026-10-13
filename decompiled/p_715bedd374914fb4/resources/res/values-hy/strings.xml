@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Չեղարկել</string>
+    <string name="__arcore_continue">Շարունակել</string>
+    <string name="__arcore_install_app">Այս հավելվածից օգտվելու համար տեղադրեք «Google Play ծառայություններ AR-ի համար» հավելվածի վերջին տարբերակը:</string>
+    <string name="__arcore_install_feature">Այս գործառույթից օգտվելու համար տեղադրեք «Google Play ծառայություններ AR-ի համար» հավելվածի վերջին տարբերակը:</string>
+    <string name="__arcore_installing">«Google Play ծառայություններ AR-ի համար» հավելվածը տեղադրվում է…</string>
+    <string name="call_notification_answer_action">Պատասխանել</string>
+    <string name="call_notification_answer_video_action">Տեսազանգ</string>
+    <string name="call_notification_decline_action">Մերժել</string>
+    <string name="call_notification_hang_up_action">Ավարտել</string>
+    <string name="call_notification_incoming_text">Մուտքային զանգ</string>
+    <string name="call_notification_ongoing_text">Ընթացիկ զանգ</string>
+    <string name="call_notification_screening_text">Մուտքային զանգի զտում</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Cancel·la</string>
+    <string name="__arcore_continue">Continua</string>
+    <string name="__arcore_install_app">Cal la darrera versió de Serveis de Google Play per a RA per utilitzar aquesta aplicació.</string>
+    <string name="__arcore_install_feature">Cal la darrera versió de Serveis de Google Play per a RA per utilitzar aquesta funció.</string>
+    <string name="__arcore_installing">S\'està instal·lant Serveis de Google Play per a RA…</string>
+    <string name="call_notification_answer_action">Respon</string>
+    <string name="call_notification_answer_video_action">Vídeo</string>
+    <string name="call_notification_decline_action">Rebutja</string>
+    <string name="call_notification_hang_up_action">Penja</string>
+    <string name="call_notification_incoming_text">Trucada entrant</string>
+    <string name="call_notification_ongoing_text">Trucada en curs</string>
+    <string name="call_notification_screening_text">S\'està filtrant una trucada entrant</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

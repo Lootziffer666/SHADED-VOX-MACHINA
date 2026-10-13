@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+
+<html data-theme="system" lang="de"><head>
+<meta charset="utf-8"/><link rel="manifest" href="./manifest.json"><meta name="theme-color" content="#006954"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>VoxelScan AR - Mesh &amp; Snap - VoxelWorld Engine</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    /* -------------------------------------------------------------
+       DESIGN SYSTEM TOKENS & THEMING (KEIN TAILWIND, PURES CUSTOM CSS)
+       ------------------------------------------------------------- */
+    :root {
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Standard / Light Theme Tokens */
+      --bg-base: #ece7de;
+      --bg-surface: #ffffff;
+      --bg-card: #f6f4ee;
+      --bg-sheet: rgba(255, 255, 255, 0.90);
+      --bg-glass-hud: rgba(255, 255, 255, 0.82);
+      --border-subtle: rgba(45, 38, 30, 0.1);
+      --border-glass: rgba(255, 255, 255, 0.55);
+      --border-strong: rgba(45, 38, 30, 0.18);
+
+      --text-main: #1d2125;
+      --text-muted: #5e6670;
+      --text-soft: #8c949f;
+
+      --accent-primary: #00876c;
+      --accent-primary-hover: #006f58;
+      --accent-primary-subtle: rgba(0, 135, 108, 0.12);
+      --accent-coral: #e25b39;
+      --accent-amber: #e69622;
+      --accent-cyan: #1995ad;
+
+      --shadow-hud: 0 8px 24px rgba(10, 20, 25, 0.14);
+      --shadow-sheet: 0 -16px 48px rgba(0, 0, 0, 0.35);
+      --shadow-btn: 0 6px 18px rgba(0, 135, 108, 0.28);
+
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+
+      --canvas-bg: radial-gradient(circle at 50% 30%, #1a2730 0%, #090e11 100%);
+      --mesh-color: rgba(56, 178, 147, 0.24);
+    }
+
+    [data-theme="dark"] {
+      --bg-base: #0f1215;
+      --bg-surface: #181d22;
+      --bg-card: #20272f;
+      --bg-sheet: rgba(20, 25, 31, 0.88);
+      --bg-glass-hud: rgba(24, 30, 37, 0.82);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glass: rgba(255, 255, 255, 0.15);
+      --border-strong: rgba(255, 255, 255, 0.2);
+
+      --text-main: #f5f7fa;
+      --text-muted: #9ba4b0;
+      --text-soft: #636c78;
+
+      --accent-primary: #34aa8d;
+      --accent-primary-hover: #45c4a4;
+      --accent-primary-subtle: rgba(52, 170, 141, 0.2);
+      --accent-coral: #f16744;
+      --accent-amber: #f2a63b;
+      --accent-cyan: #3ac0e2;
+
+      --shadow-hud: 0 10px 28px rgba(0, 0, 0, 0.5);
+      --shadow-sheet: 0 -18px 52px rgba(0, 0, 0, 0.7);
+      --shadow-btn: 0 8px 24px rgba(52, 170, 141, 0.4);
+
+      --canvas-bg: radial-gradient(circle at 50% 30%, #151e24 0%, #06080a 100%);
+      --mesh-color: rgba(52, 170, 141, 0.25);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-theme="system"] {
+        --bg-base: #0f1215;
+        --bg-surface: #181d22;
+        --bg-card: #20272f;
+        --bg-sheet: rgba(20, 25, 31, 0.88);
+        --bg-glass-hud: rgba(24, 30, 37, 0.82);
+        --border-subtle: rgba(255, 255, 255, 0.08);
+        --border-glass: rgba(255, 255, 255, 0.15);
+        --border-strong: rgba(255, 255, 255, 0.2);
+
+        --text-main: #f5f7fa;
+        --text-muted: #9ba4b0;
+        --text-soft: #636c78;
+
+        --accent-primary: #34aa8d;
+        --accent-primary-hover: #45c4a4;
+        --accent-primary-subtle: rgba(52, 170, 141, 0.2);
+        --accent-coral: #f16744;
+        --accent-amber: #f2a63b;
+        --accent-cyan: #3ac0e2;
+
+        --shadow-hud: 0 10px 28px rgba(0, 0, 0, 0.5);
+        --shadow-sheet: 0 -18px 52px rgba(0, 0, 0, 0.7);
+        --shadow-btn: 0 8px 24px rgba(52, 170, 141, 0.4);
+
+        --canvas-bg: radial-gradient(circle at 50% 30%, #151e24 0%, #06080a 100%);
+        --mesh-color: rgba(52, 170, 141, 0.25);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       GLOBAL RESET & SHELL
+       ------------------------------------------------------------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #0b0e11;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .viewport-root {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 900px;
+      overflow: hidden;
+      background: #000000;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      border-radius: 40px;
+      border: 8px solid #1a1e24;
+    }
+
+    @media (max-width: 480px) {
+      .viewport-root {
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       FULLSCREEN AR CANVAS & 3D SIMULATION (H-FULL / 100VH)
+       ------------------------------------------------------------- */
+    .ar-fullscreen-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--canvas-bg);
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .lidar-pointcloud {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(1.5px 1.5px at 15% 20%, #5eead4 100%, transparent),
+        radial-gradient(1.5px 1.5px at 30% 15%, #34d399 100%, transparent),
+        radial-gradient(2px 2px at 72% 22%, #5eead4 100%, transparent),
+        radial-gradient(1.5px 1.5px at 85% 40%, #38bdf8 100%, transparent),
+        radial-gradient(2px 2px at 20% 45%, #a7f3d0 100%, transparent),
+        radial-gradient(1.5px 1.5px at 62% 48%, #5eead4 100%, transparent);
+      background-size: 160px 160px;
+      opacity: 0.65;
+      animation: lidarFloat 9s linear infinite;
+    }
+
+    @keyframes lidarFloat {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.02); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .ar-grid-ground {
+      position: absolute;
+      width: 260%;
+      height: 180%;
+      left: -80%;
+      top: -20%;
+      background-image: 
+        linear-gradient(var(--mesh-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--mesh-color) 1px, transparent 1px);
+      background-size: 30px 30px;
+      transform: perspective(380px) rotateX(68deg);
+      transform-origin: center top;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .lidar-scan-laser {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(241, 103, 68, 0.4) 15%, var(--accent-coral) 50%, rgba(241, 103, 68, 0.4) 85%, transparent 100%);
+      box-shadow: 0 0 16px 2px var(--accent-coral);
+      z-index: 5;
+      animation: laserSweep 3.6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes laserSweep {
+      0% { top: 12%; opacity: 0.25; }
+      50% { opacity: 0.95; }
+      100% { top: 40%; opacity: 0.3; }
+    }
+
+    /* Schwebende Voxel-Cluster Visualisierung (im sichtbaren oberen Bereich) */
+    .voxel-3d-scene {
+      position: absolute;
+      top: 26%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 175px;
+      height: 155px;
+      pointer-events: none;
+      animation: voxelFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes voxelFloat {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(-1deg); }
+      50% { transform: translate(-50%, -50%) translateY(-10px) rotate(1.5deg); }
+    }
+
+    /* -------------------------------------------------------------
+       HUD-PILLEN AM BILDRAND
+       ------------------------------------------------------------- */
+    .hud-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 16px;
+    }
+
+    .hud-interactive {
+      pointer-events: auto;
+    }
+
+    .glass-pill {
+      background: var(--bg-glass-hud);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: var(--shadow-hud);
+    }
+
+    .glass-pill.highlight {
+      background: rgba(0, 135, 108, 0.22);
+      border-color: rgba(52, 170, 141, 0.45);
+      color: #38dfb4;
+    }
+
+    .hud-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: hudBlink 1.8s infinite;
+    }
+
+    @keyframes hudBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    .top-hud-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .hud-group-left, .hud-group-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-segmented {
+      display: flex;
+      background: var(--bg-glass-hud);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-pill);
+      padding: 2.5px;
+      box-shadow: var(--shadow-hud);
+    }
+
+    .theme-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .theme-btn.active {
+      background: var(--bg-surface);
+      color: var(--accent-primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    /* Kompakte obere Telemetrie-Reihe unterhalb der Topbar */
+    .sub-telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .hud-mini-chip {
+      background: var(--bg-glass-hud);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-hud);
+    }
+
+    .hud-mini-chip strong {
+      font-family: var(--font-mono);
+      color: var(--accent-primary);
+    }
+
+    /* -------------------------------------------------------------
+       HALBHOHE BOTTOM SHEET (ca. 58% HOCH, GEÖFFNETER TAB MESH & SNAP)
+       ------------------------------------------------------------- */
+    .bottom-drawer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 60%;
+      background: var(--bg-sheet);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border-top: 1px solid var(--border-glass);
+      border-radius: 30px 30px 0 0;
+      box-shadow: var(--shadow-sheet);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0);
+      transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.05);
+    }
+
+    .bottom-drawer.collapsed {
+      transform: translateY(calc(100% - 78px));
+    }
+
+    .drawer-handle-zone {
+      padding: 10px 0 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .drawer-notch {
+      width: 44px;
+      height: 4.5px;
+      border-radius: var(--radius-pill);
+      background: var(--text-soft);
+      opacity: 0.45;
+    }
+
+    /* Reiter-Navigation (3 Tabs) */
+    .drawer-tabs {
+      display: flex;
+      padding: 0 16px 8px;
+      gap: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-primary-subtle);
+      color: var(--accent-primary);
+    }
+
+    /* Scrollable Drawer Content */
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: none;
+    }
+    .drawer-body::-webkit-scrollbar { display: none; }
+
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .tab-pane.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* -------------------------------------------------------------
+       TAKTILE MESH & SNAP KARTEN & KONTROLLEN
+       ------------------------------------------------------------- */
+    .snap-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .snap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .snap-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .snap-icon-sq {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-primary-subtle);
+      color: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .snap-icon-sq.coral {
+      background: rgba(226, 91, 57, 0.14);
+      color: var(--accent-coral);
+    }
+
+    .snap-icon-sq.amber {
+      background: rgba(230, 150, 34, 0.14);
+      color: var(--accent-amber);
+    }
+
+    .snap-title-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .snap-method-code {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-soft);
+      margin-top: 1px;
+    }
+
+    .chip-badge {
+      background: var(--accent-primary-subtle);
+      color: var(--accent-primary);
+      font-size: 10.5px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chip-badge.active-dot::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: inline-block;
+    }
+
+    /* Slider & Parameter Control Row */
+    .slider-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 8px 12px;
+      gap: 10px;
+    }
+
+    .slider-info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .slider-tactile {
+      flex: 1;
+      height: 6px;
+      accent-color: var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .slider-val-readout {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      min-width: 44px;
+      text-align: right;
+    }
+
+    /* Taktiler Auslöser-Button */
+    .snap-trigger-btn {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .snap-trigger-btn:active {
+      transform: scale(0.98);
+      background: var(--accent-primary-subtle);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .snap-trigger-btn.primary {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 135, 108, 0.25);
+    }
+
+    .snap-trigger-btn.primary:active {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+
+    /* 2-Spalten Layout für Cleanup & Discard */
+    .cleanup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cleanup-tile {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* -------------------------------------------------------------
+       UNTEN VERANKERTE KOMPAKTE MINI-LEISTE (REC / PAUSE / STOP)
+       ------------------------------------------------------------- */
+    .drawer-dock-bottom {
+      padding: 10px 16px 14px;
+      background: var(--bg-sheet);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .mini-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .mini-rec-pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulseRecord 1.2s infinite;
+    }
+
+    .mini-rec-pulse.is-paused {
+      background: var(--accent-amber);
+      box-shadow: 0 0 8px var(--accent-amber);
+      animation: none;
+    }
+
+    @keyframes pulseRecord {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(1.3); }
+    }
+
+    .mini-action-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-btn {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transition: all 0.15s ease;
+    }
+
+    .mini-btn:active {
+      transform: scale(0.95);
+    }
+
+    .mini-btn.stop {
+      color: var(--accent-coral);
+      border-color: rgba(241, 103, 68, 0.3);
+    }
+
+    .mini-btn.stop:active {
+      background: rgba(241, 103, 68, 0.1);
+    }
+
+    /* Toast Nachricht */
+    .toast-pill {
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--bg-surface);
+      border: 1px solid var(--accent-primary);
+      color: var(--text-main);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      border-radius: var(--radius-pill);
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.4, 1);
+      z-index: 60;
+    }
+
+    .toast-pill.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+<div class="viewport-root">
+<!-- 1. FULLSCREEN AR VIEWPORT (Hintergrund bleibt sichtbar) -->
+<div class="ar-fullscreen-canvas">
+<div class="lidar-pointcloud"></div>
+<div class="ar-grid-ground"></div>
+<div class="lidar-scan-laser"></div>
+<!-- Voxel Cluster Visualisierung im oberen sichtbaren Raum -->
+<svg class="voxel-3d-scene" fill="none" viewbox="0 0 160 140">
+<defs>
+<filter height="140%" id="voxelGlow" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+</defs>
+<g filter="url(#voxelGlow)" transform="translate(56, 16)">
+<polygon fill="#38dfb4" opacity="0.95" points="24,0 48,13 24,26 0,13"></polygon>
+<polygon fill="#1b9a79" opacity="0.95" points="0,13 24,26 24,52 0,39"></polygon>
+<polygon fill="#147c61" opacity="0.95" points="24,26 48,13 48,39 24,52"></polygon>
+</g>
+<g transform="translate(24, 34)">
+<polygon fill="#5ce8c4" opacity="0.88" points="24,0 48,13 24,26 0,13"></polygon>
+<polygon fill="#24ab87" opacity="0.92" points="0,13 24,26 24,52 0,39"></polygon>
+<polygon fill="#1b886c" opacity="0.92" points="24,26 48,13 48,39 24,52"></polygon>
+</g>
+<g transform="translate(84, 40)">
+<polygon fill="#f4ad3d" opacity="0.95" points="24,0 48,13 24,26 0,13"></polygon>
+<polygon fill="#ca821a" opacity="0.95" points="0,13 24,26 24,52 0,39"></polygon>
+<polygon fill="#9d620e" opacity="0.95" points="24,26 48,13 48,39 24,52"></polygon>
+</g>
+<g transform="translate(52, 58)">
+<polygon fill="#38dfb4" opacity="0.96" points="24,0 48,13 24,26 0,13"></polygon>
+<polygon fill="#1b9a79" opacity="0.98" points="0,13 24,26 24,52 0,39"></polygon>
+<polygon fill="#147c61" opacity="0.98" points="24,26 48,13 48,39 24,52"></polygon>
+</g>
+</svg>
+</div>
+<!-- 2. SCHWEBENDE TRANSPARENTE STATUS-PILLEN OBEN -->
+<div class="hud-layer">
+<div class="top-hud-bar hud-interactive">
+<div class="hud-group-left">
+<div class="glass-pill">
+<span class="hud-status-dot"></span>
+<span>ARCore 6DoF · Aktiv</span>
+</div>
+<div class="glass-pill highlight" id="hudYawPill">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24m5.66 5.66 4.24 4.24"></path></svg>
+<span id="txtYaw">Yaw: 14.9°</span>
+</div>
+</div>
+<!-- Theme Switcher -->
+<div class="theme-segmented hud-group-right">
+<button class="theme-btn" data-theme-val="light" title="Hell">
+<svg fill="none" height="11" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="11"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+            Hell
+          </button>
+<button class="theme-btn" data-theme-val="dark" title="Dunkel">
+<svg fill="none" height="11" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="11"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            Dunkel
+          </button>
+<button class="theme-btn active" data-theme-val="system" title="Auto">
+<svg fill="none" height="11" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="11"><rect height="14" rx="2" width="20" x="2" y="3"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+            Auto
+          </button>
+</div>
+</div>
+<!-- Kompakte Voxel- & TSDF-Pillen oben -->
+<div class="sub-telemetry-row hud-interactive">
+<div class="hud-mini-chip">
+          Voxel: <strong id="hudLiveVoxels">1.348 / 3000</strong>
+</div>
+<div class="hud-mini-chip">
+          Bestätigt: <strong id="hudConfirmed">1.189</strong> (≥5)
+        </div>
+<div class="hud-mini-chip">
+          TSDF: <strong id="hudTsdf">18.4k</strong>
+</div>
+</div>
+</div>
+<!-- 3. HALBHOHE TRANSLUZENTE BOTTOM SHEET (MIT AKTIVEM MESH & SNAP REITER) -->
+<div class="bottom-drawer" id="bottomDrawer">
+<!-- Drawer Grab Handle -->
+<div class="drawer-handle-zone" id="drawerHandle" title="Antippen zum Ein/Ausklappen">
+<div class="drawer-notch"></div>
+</div>
+<!-- Reiter-Navigation -->
+<div class="drawer-tabs">
+<button class="tab-btn" data-tab="tab-live" id="btnTabLive">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="13"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        Live Scan &amp; Chunks
+      </button>
+<button class="tab-btn active" data-tab="tab-mesh" id="btnTabMesh">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="13"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        Mesh &amp; Snap
+      </button>
+<button class="tab-btn" data-tab="tab-params" id="btnTabParams">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        Parameter &amp; Export
+      </button>
+</div>
+<!-- Scrollbarer Drawer-Inhalt -->
+<div class="drawer-body">
+<!-- TAB 1: LIVE SCAN (Inaktiv) -->
+<div class="tab-pane" id="tab-live">
+<div class="snap-card">
+<div class="snap-header">
+<span class="snap-title-text">Speicherauslastung (MAX_VOXELS)</span>
+<span class="chip-badge">12 Chunks (16³)</span>
+</div>
+<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">1.348 / 3.000 Voxel belegt (44.9%)</div>
+<button class="snap-trigger-btn" id="btnSwitchToSnap">Zurück zu Mesh &amp; Snap wechseln</button>
+</div>
+</div>
+<!-- TAB 2: MESH & SNAP (AKTIV) -->
+<div class="tab-pane active" id="tab-mesh">
+<!-- 1. snapFloor() -->
+<div class="snap-card">
+<div class="snap-header">
+<div class="snap-identity">
+<div class="snap-icon-sq">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="18"><path d="M2 20h20"></path><path d="M5 20V8l7-5 7 5v12"></path></svg>
+</div>
+<div>
+<div class="snap-title-text">Boden einrasten (Y-Ebene)</div>
+<div class="snap-method-code">snapFloor(y=0.0m, tol=0.04m)</div>
+</div>
+</div>
+<span class="chip-badge active-dot" id="badgeFloorStatus">Y = 0.00m</span>
+</div>
+<div class="slider-control-row">
+<span class="slider-info-label">Toleranz (tol)</span>
+<input class="slider-tactile" id="sliderFloorTol" max="0.10" min="0.01" step="0.01" type="range" value="0.04"/>
+<span class="slider-val-readout" id="lblFloorTol">±0.04m</span>
+</div>
+<button class="snap-trigger-btn primary" id="btnRunSnapFloor">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            snapFloor() jetzt anwenden
+          </button>
+</div>
+<!-- 2. snapWall() -->
+<div class="snap-card">
+<div class="snap-header">
+<div class="snap-identity">
+<div class="snap-icon-sq">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="18"><line x1="4" x2="4" y1="4" y2="20"></line><rect height="16" rx="1" width="12" x="8" y="4"></rect></svg>
+</div>
+<div>
+<div class="snap-title-text">Wände begradigen</div>
+<div class="snap-method-code">snapWall(normal=[1,0,0], tol=0.05m)</div>
+</div>
+</div>
+<span class="chip-badge">X/Z Ortho</span>
+</div>
+<div class="slider-control-row">
+<span class="slider-info-label">Wand-Toleranz</span>
+<input class="slider-tactile" id="sliderWallTol" max="0.12" min="0.02" step="0.01" type="range" value="0.05"/>
+<span class="slider-val-readout" id="lblWallTol">±0.05m</span>
+</div>
+<button class="snap-trigger-btn" id="btnRunSnapWall">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="14"><line x1="4" x2="4" y1="4" y2="20"></line><line x1="20" x2="20" y1="4" y2="20"></line><path d="M8 12h8"></path></svg>
+            snapWall() ausführen
+          </button>
+</div>
+<!-- 3 & 4. cleanup() & discardRecentWeak() im 2-Spalten Layout -->
+<div class="cleanup-grid">
+<!-- Cleanup -->
+<div class="cleanup-tile">
+<div>
+<div class="snap-header" style="margin-bottom:6px;">
+<div class="snap-icon-sq coral">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+</div>
+<span class="chip-badge" style="background:rgba(226,91,57,0.12); color:var(--accent-coral);">1200ms</span>
+</div>
+<div class="snap-title-text">Rauschen filtern</div>
+<div class="snap-method-code">cleanup() verwaist</div>
+</div>
+<button class="snap-trigger-btn" id="btnRunCleanup" style="padding:7px 8px; font-size:11.5px;">
+              cleanup()
+            </button>
+</div>
+<!-- Discard Weak -->
+<div class="cleanup-tile">
+<div>
+<div class="snap-header" style="margin-bottom:6px;">
+<div class="snap-icon-sq amber">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg>
+</div>
+<span class="chip-badge" style="background:rgba(230,150,34,0.12); color:var(--accent-amber);">&lt; 5 Proben</span>
+</div>
+<div class="snap-title-text">Schwache Proben</div>
+<div class="snap-method-code">discardRecentWeak()</div>
+</div>
+<button class="snap-trigger-btn" id="btnRunDiscard" style="padding:7px 8px; font-size:11.5px;">
+              Verwerfen
+            </button>
+</div>
+</div>
+</div>
+<!-- TAB 3: PARAMETER & EXPORT (Inaktiv) -->
+<div class="tab-pane" id="tab-params">
+<div class="snap-card">
+<div class="snap-header">
+<span class="snap-title-text">Voxel-Parameter &amp; JSON</span>
+<span class="chip-badge">0.05m Raster</span>
+</div>
+<button class="snap-trigger-btn primary" id="btnExportJson">
+            writeJson() Exportieren
+          </button>
+</div>
+</div>
+</div>
+<!-- 4. UNTEN VERANKERTE KOMPAKTE MINI-LEISTE (Rec / Pause / Stop) -->
+<div class="drawer-dock-bottom">
+<div class="mini-status-indicator">
+<span class="mini-rec-pulse" id="miniRecPulse"></span>
+<span id="miniRecStateLabel">TSDF Scan läuft</span>
+</div>
+<div class="mini-action-group">
+<button class="mini-btn" id="btnMiniTogglePause">
+<svg fill="none" height="13" id="iconPausePlay" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="13"><rect height="16" rx="1" width="4" x="6" y="4"></rect><rect height="16" rx="1" width="4" x="14" y="4"></rect></svg>
+<span id="txtMiniPause">Pausieren</span>
+</button>
+<button class="mini-btn stop" id="btnMiniStop" title="Scan stoppen">
+<svg fill="currentColor" height="11" viewbox="0 0 24 24" width="11"><rect height="16" rx="2" width="16" x="4" y="4"></rect></svg>
+<span>Stop</span>
+</button>
+</div>
+</div>
+</div>
+<!-- TOAST NOTIFICATION FEEDBACK -->
+<div class="toast-pill" id="toastPill">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="15"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span id="toastMsgText">Aktion erfolgreich ausgeführt</span>
+</div>
+</div>
+<!-- INTERAKTIVE LOGIK -->
+<script>
+    (function() {
+      // 1. Theme Management (Hell / Dunkel / Auto)
+      const htmlElem = document.documentElement;
+      const themeBtns = document.querySelectorAll('.theme-btn');
+
+      themeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          themeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const val = btn.getAttribute('data-theme-val');
+          htmlElem.setAttribute('data-theme', val);
+          showToast(`Theme: ${btn.textContent.trim()}`);
+        });
+      });
+
+      // 2. Toast Notification Feedback
+      const toast = document.getElementById('toastPill');
+      const toastMsgText = document.getElementById('toastMsgText');
+      let toastTimer = null;
+
+      function showToast(msg) {
+        if (toastTimer) clearTimeout(toastTimer);
+        toastMsgText.textContent = msg;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      // 3. Tab-Navigation im Bottom-Sheet
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      function switchTab(targetId) {
+        tabBtns.forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-tab') === targetId);
+        });
+        tabPanes.forEach(p => {
+          p.classList.toggle('active', p.id === targetId);
+        });
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.getAttribute('data-tab'));
+        });
+      });
+
+      const btnSwitchToSnap = document.getElementById('btnSwitchToSnap');
+      if (btnSwitchToSnap) {
+        btnSwitchToSnap.addEventListener('click', () => switchTab('tab-mesh'));
+      }
+
+      // 4. Drawer Toggle (Notch antippen)
+      const drawer = document.getElementById('bottomDrawer');
+      const drawerHandle = document.getElementById('drawerHandle');
+      drawerHandle.addEventListener('click', () => {
+        drawer.classList.toggle('collapsed');
+      });
+
+      // 5. Mesh & Snap Aktionen (VoxelWorld.java)
+      const sliderFloorTol = document.getElementById('sliderFloorTol');
+      const lblFloorTol = document.getElementById('lblFloorTol');
+      sliderFloorTol.addEventListener('input', (e) => {
+        lblFloorTol.textContent = `±${parseFloat(e.target.value).toFixed(2)}m`;
+      });
+
+      const sliderWallTol = document.getElementById('sliderWallTol');
+      const lblWallTol = document.getElementById('lblWallTol');
+      sliderWallTol.addEventListener('input', (e) => {
+        lblWallTol.textContent = `±${parseFloat(e.target.value).toFixed(2)}m`;
+      });
+
+      document.getElementById('btnRunSnapFloor').addEventListener('click', () => {
+        const tol = sliderFloorTol.value;
+        showToast(`snapFloor(y=0.0m, tol=${tol}m): Boden ausgerichtet`);
+        document.getElementById('badgeFloorStatus').textContent = 'Y = 0.00m ✓';
+      });
+
+      document.getElementById('btnRunSnapWall').addEventListener('click', () => {
+        const tol = sliderWallTol.value;
+        showToast(`snapWall([1,0,0], tol=${tol}m): Wandflächen begradigt`);
+      });
+
+      document.getElementById('btnRunCleanup').addEventListener('click', () => {
+        showToast('cleanup(): 1200ms Scan · 24 Rausch-Voxels gelöscht');
+      });
+
+      document.getElementById('btnRunDiscard').addEventListener('click', () => {
+        showToast('discardRecentWeak(): Proben < 5 verworfen');
+      });
+
+      document.getElementById('btnExportJson').addEventListener('click', () => {
+        showToast('writeJson(): voxelworld.json exportiert');
+      });
+
+      // 6. Kompakte Mini-Aufnahme/Pause/Stop Leiste
+      let isScanning = true;
+      const miniRecPulse = document.getElementById('miniRecPulse');
+      const miniRecStateLabel = document.getElementById('miniRecStateLabel');
+      const btnMiniTogglePause = document.getElementById('btnMiniTogglePause');
+      const txtMiniPause = document.getElementById('txtMiniPause');
+      const btnMiniStop = document.getElementById('btnMiniStop');
+
+      btnMiniTogglePause.addEventListener('click', () => {
+        isScanning = !isScanning;
+        if (isScanning) {
+          miniRecPulse.classList.remove('is-paused');
+          miniRecStateLabel.textContent = 'TSDF Scan läuft';
+          txtMiniPause.textContent = 'Pausieren';
+          showToast('Scan fortgesetzt');
+        } else {
+          miniRecPulse.classList.add('is-paused');
+          miniRecStateLabel.textContent = 'Pausiert';
+          txtMiniPause.textContent = 'Weiter';
+          showToast('Scan pausiert');
+        }
+      });
+
+      btnMiniStop.addEventListener('click', () => {
+        isScanning = false;
+        miniRecPulse.classList.add('is-paused');
+        miniRecStateLabel.textContent = 'Scan beendet';
+        txtMiniPause.textContent = 'Start';
+        showToast('Aufnahme gestoppt & Mesh eingefroren');
+      });
+
+      // 7. Sanfte Telemetrie-Aktualisierung (Yaw & Voxels)
+      let yaw = 14.9;
+      const txtYaw = document.getElementById('txtYaw');
+      let liveVoxels = 1348;
+      const hudLiveVoxels = document.getElementById('hudLiveVoxels');
+
+      setInterval(() => {
+        if (isScanning) {
+          yaw += (Math.random() * 0.4 - 0.2);
+          txtYaw.textContent = `Yaw: ${yaw.toFixed(1)}°`;
+          
+          if (liveVoxels < 2980) {
+            liveVoxels += Math.floor(Math.random() * 2) + 1;
+            hudLiveVoxels.textContent = `${liveVoxels} / 3000`;
+          }
+        }
+      }, 2400);
+
+    })();
+  </script>
+<script src="./js/app.js"></script></body></html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">రద్దు చేయండి</string>
+    <string name="__arcore_continue">కొనసాగించండి</string>
+    <string name="__arcore_install_app">ఈ యాప్‌కు AR కోసం Google Play సేవలు యొక్క తాజా వెర్షన్ అవసరం.</string>
+    <string name="__arcore_install_feature">ఈ ఫీచర్ కోసం AR కోసం Google Play సేవలు యొక్క తాజా వెర్షన్ అవసరం.</string>
+    <string name="__arcore_installing">AR కోసం Google Play సేవలు ఇన్‌స్టాల్ చేస్తోంది…</string>
+    <string name="call_notification_answer_action">పికప్ చేయండి</string>
+    <string name="call_notification_answer_video_action">వీడియో కాల్</string>
+    <string name="call_notification_decline_action">కట్ చేయండి</string>
+    <string name="call_notification_hang_up_action">ముగించండి</string>
+    <string name="call_notification_incoming_text">ఇన్‌కమింగ్ కాల్</string>
+    <string name="call_notification_ongoing_text">కాల్ కొనసాగుతోంది</string>
+    <string name="call_notification_screening_text">ఇన్‌కమింగ్ కాల్‌ను స్క్రీన్ చేయండి</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

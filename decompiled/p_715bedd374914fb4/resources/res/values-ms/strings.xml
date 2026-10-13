@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Batal</string>
+    <string name="__arcore_continue">Teruskan</string>
+    <string name="__arcore_install_app">Aplikasi ini memerlukan versi terbaharu Google Play Services for AR.</string>
+    <string name="__arcore_install_feature">Ciri ini memerlukan versi terbaharu Google Play Services for AR.</string>
+    <string name="__arcore_installing">Memasang Google Play Services for AR…</string>
+    <string name="call_notification_answer_action">Jawab</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Tolak</string>
+    <string name="call_notification_hang_up_action">Tamatkan Panggilan</string>
+    <string name="call_notification_incoming_text">Panggilan masuk</string>
+    <string name="call_notification_ongoing_text">Panggilan sedang berlangsung</string>
+    <string name="call_notification_screening_text">Menyaring panggilan masuk</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

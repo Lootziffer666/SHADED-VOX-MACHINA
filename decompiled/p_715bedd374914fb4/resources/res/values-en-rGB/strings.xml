@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Cancel</string>
+    <string name="__arcore_continue">Continue</string>
+    <string name="__arcore_install_app">This application requires the latest version of Google Play Services for AR.</string>
+    <string name="__arcore_install_feature">This feature requires the latest version of Google Play Services for AR.</string>
+    <string name="__arcore_installing">Installing Google Play Services for AR…</string>
+    <string name="call_notification_answer_action">Answer</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Decline</string>
+    <string name="call_notification_hang_up_action">Hang up</string>
+    <string name="call_notification_incoming_text">Incoming call</string>
+    <string name="call_notification_ongoing_text">On-going call</string>
+    <string name="call_notification_screening_text">Screening an incoming call</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

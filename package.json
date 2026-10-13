@@ -1,0 +1,14 @@
+{
+  "name": "voxelscan-ar-pwa",
+  "version": "1.0.0",
+  "description": "VoxelScan AR as Progressive Web App",
+  "main": "webapp/index.html",
+  "scripts": {
+    "start": "npx serve webapp",
+    "build": "echo 'static site - no build step needed'",
+    "preview": "npx serve webapp"
+  },
+  "keywords": ["pwa", "ar", "voxelscan", "tsdf"],
+  "author": "",
+  "license": "MIT"
+}

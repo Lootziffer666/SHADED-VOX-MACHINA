@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Скасувати</string>
+    <string name="__arcore_continue">Продовжити</string>
+    <string name="__arcore_install_app">Для використання цього додатка потрібно мати останню версію Сервісів Google Play для AR.</string>
+    <string name="__arcore_install_feature">Для використання цієї функції потрібно мати останню версію Сервісів Google Play для AR.</string>
+    <string name="__arcore_installing">Встановлення Сервісів Google Play для AR…</string>
+    <string name="call_notification_answer_action">Відповісти</string>
+    <string name="call_notification_answer_video_action">Відео</string>
+    <string name="call_notification_decline_action">Відхилити</string>
+    <string name="call_notification_hang_up_action">Завершити</string>
+    <string name="call_notification_incoming_text">Вхідний виклик</string>
+    <string name="call_notification_ongoing_text">Активний виклик</string>
+    <string name="call_notification_screening_text">Вхідний виклик (Фільтр)</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

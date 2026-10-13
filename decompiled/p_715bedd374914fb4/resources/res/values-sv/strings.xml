@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Avbryt</string>
+    <string name="__arcore_continue">Fortsätt</string>
+    <string name="__arcore_install_app">Den senaste versionen av Google Play-tjänster för AR krävs för den här appen.</string>
+    <string name="__arcore_install_feature">Den senaste versionen av Google Play-tjänster för AR krävs för den här funktionen.</string>
+    <string name="__arcore_installing">Google Play-tjänster för AR installeras …</string>
+    <string name="call_notification_answer_action">Svara</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Avvisa</string>
+    <string name="call_notification_hang_up_action">Lägg på</string>
+    <string name="call_notification_incoming_text">Inkommande samtal</string>
+    <string name="call_notification_ongoing_text">Pågående samtal</string>
+    <string name="call_notification_screening_text">Ett inkommande samtal filtreras</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

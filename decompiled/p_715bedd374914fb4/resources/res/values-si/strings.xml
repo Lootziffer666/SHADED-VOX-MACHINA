@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">අවලංගු කරන්න</string>
+    <string name="__arcore_continue">ඉදිරියට යන්න</string>
+    <string name="__arcore_install_app">මෙම යෙදුමට නවතම AR සඳහා Google Play සේවා අනුවාදය අවශ්‍යයි.</string>
+    <string name="__arcore_install_feature">මෙම විශේෂාංගයට නවතම AR සඳහා Google Play සේවා අනුවාදය අවශ්‍යයි</string>
+    <string name="__arcore_installing">AR සඳහා Google Play සේවා ස්ථාපනය කරමින්…</string>
+    <string name="call_notification_answer_action">පිළිතුරු දෙ.</string>
+    <string name="call_notification_answer_video_action">වීඩියෝ</string>
+    <string name="call_notification_decline_action">ප්‍රතික්ෂේප ක</string>
+    <string name="call_notification_hang_up_action">විසන්ධි කරන්න</string>
+    <string name="call_notification_incoming_text">එන ඇමතුම</string>
+    <string name="call_notification_ongoing_text">කරගෙන යන ඇමතුම</string>
+    <string name="call_notification_screening_text">එන ඇමතුමක් පරීක්ෂා කරන්න</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

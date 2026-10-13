@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Atšaukti</string>
+    <string name="__arcore_continue">Tęsti</string>
+    <string name="__arcore_install_app">Norint naudoti šią programą reikalinga naujausia „Google Play“ paslaugų, skirtų AR, versija.</string>
+    <string name="__arcore_install_feature">Norint naudoti šią funkciją reikalinga naujausia „Google Play“ paslaugų, skirtų AR, versija.</string>
+    <string name="__arcore_installing">Įdiegiamos „Google Play“ paslaugos, skirtos AR…</string>
+    <string name="call_notification_answer_action">Atsakyti</string>
+    <string name="call_notification_answer_video_action">Vaizdo įrašas</string>
+    <string name="call_notification_decline_action">Atmesti</string>
+    <string name="call_notification_hang_up_action">Baigti pok.</string>
+    <string name="call_notification_incoming_text">Gaunamasis skambutis</string>
+    <string name="call_notification_ongoing_text">Vykstantis skambutis</string>
+    <string name="call_notification_screening_text">Gaunamojo skambučio tikrinimas</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

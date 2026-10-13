@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Tühista</string>
+    <string name="__arcore_continue">Jätka</string>
+    <string name="__arcore_install_app">See rakendus nõuab paketi Google Play Services for AR uusimat versiooni.</string>
+    <string name="__arcore_install_feature">See funktsioon nõuab paketi Google Play Services for AR uusimat versiooni.</string>
+    <string name="__arcore_installing">Paketi Google Play Services for AR installimine …</string>
+    <string name="call_notification_answer_action">Vasta</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Keeldu</string>
+    <string name="call_notification_hang_up_action">Lõpeta kõne</string>
+    <string name="call_notification_incoming_text">Sissetulev kõne</string>
+    <string name="call_notification_ongoing_text">Käimasolev kõne</string>
+    <string name="call_notification_screening_text">Sissetuleva kõne filtreerimine</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

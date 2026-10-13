@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">Bekor qilish</string>
+    <string name="__arcore_continue">Davom etish</string>
+    <string name="__arcore_install_app">Bu ilovadan foydalanish uchun AR uchun Google Play xizmatlarining eng oxirigi versiyasini o‘rnating.</string>
+    <string name="__arcore_install_feature">Bu funksiyadan foydalanish uchun AR uchun Google Play xizmatlarining eng oxirigi versiyasini o‘rnating.</string>
+    <string name="__arcore_installing">AR uchun Google Play xizmatlari o‘rnatilmoqda…</string>
+    <string name="call_notification_answer_action">Javob berish</string>
+    <string name="call_notification_answer_video_action">Video</string>
+    <string name="call_notification_decline_action">Rad etish</string>
+    <string name="call_notification_hang_up_action">Tugatish</string>
+    <string name="call_notification_incoming_text">Kiruvchi chaqiruv</string>
+    <string name="call_notification_ongoing_text">Joriy chaqiruv</string>
+    <string name="call_notification_screening_text">Kiruvchi chaqiruvni filtrlash</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>

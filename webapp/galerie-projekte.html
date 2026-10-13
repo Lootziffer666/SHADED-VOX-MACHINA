@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html lang="de"><head><meta charset="utf-8"/><link rel="manifest" href="./manifest.json"><meta name="theme-color" content="#006954"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-highest": "#e5e2db", "error-container": "#ffdad6", "surface-container-low": "#f6f3ec", "primary-fixed-dim": "#7cd7bc", "on-background": "#1c1c18", "surface": "#fcf9f2", "on-secondary-container": "#6f3200", "on-secondary": "#ffffff", "on-secondary-fixed-variant": "#753400", "secondary-fixed-dim": "#ffb68b", "surface-dim": "#dcdad3", "secondary": "#984805", "inverse-on-surface": "#f3f0ea", "on-primary": "#ffffff", "tertiary-container": "#39816a", "on-surface": "#1c1c18", "background": "#fcf9f2", "surface-container-lowest": "#ffffff", "on-tertiary-fixed-variant": "#00513e", "primary-container": "#1d836c", "tertiary-fixed": "#a8f1d6", "tertiary-fixed-dim": "#8dd5bb", "on-error-container": "#93000a", "surface-container-high": "#ebe8e1", "secondary-fixed": "#ffdbc8", "surface-variant": "#e5e2db", "tertiary": "#1b6852", "on-primary-fixed-variant": "#005141", "surface-bright": "#fcf9f2", "outline": "#6e7a75", "primary": "#006954", "outline-variant": "#bdc9c3", "error": "#ba1a1a", "on-primary-container": "#f5fff9", "on-tertiary-container": "#f5fff8", "inverse-surface": "#31312c", "primary-fixed": "#98f4d7", "surface-container": "#f0eee7", "on-secondary-fixed": "#321300", "on-primary-fixed": "#002018", "on-tertiary-fixed": "#002117", "on-error": "#ffffff", "secondary-container": "#fd9754", "on-surface-variant": "#3e4945", "on-tertiary": "#ffffff", "surface-tint": "#006b56", "inverse-primary": "#7cd7bc" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1.25rem", "space-xs": "0.25rem", "space-md": "0.875rem", "space-sm": "0.5rem", "margin": "1.25rem", "space-xl": "2rem", "gutter": "1rem" }, fontFamily: { "label-hud": ["Space Grotesk"], "headline-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "label-numeric": ["Space Grotesk"], "headline-xl": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"] }, fontSize: { "label-hud": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "700" }], "headline-sm": ["17px", { lineHeight: "22px", fontWeight: "600" }], "headline-lg-mobile": ["22px", { lineHeight: "28px", letterSpacing: "-0.015em", fontWeight: "700" }], "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "headline-xl-mobile": ["28px", { lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "800" }], "label-numeric": ["15px", { lineHeight: "18px", letterSpacing: "-0.01em", fontWeight: "600" }], "headline-xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.03em", fontWeight: "800" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "headline-lg": ["26px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-sm": ["11px", { lineHeight: "14px", fontWeight: "500" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.tactile-dock{box-shadow:0 12px 32px -4px rgba(28,28,24,0.12),0 4px 12px -2px rgba(28,28,24,0.06),inset 0 1px 0 rgba(255,255,255,0.8);}.tactile-header{box-shadow:0 4px 16px -2px rgba(28,28,24,0.05),inset 0 -1px 0 rgba(255,255,255,0.6);}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl tactile-header pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shadow-[inset_0_1.5px_0_rgba(255,255,255,0.4)]"><span class="material-symbols-outlined text-[20px]">view_in_ar</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface truncate">VoxelScan AR</span><span class="font-label-hud text-label-hud px-1.5 py-0.5 rounded bg-surface-container-high text-primary tracking-wider uppercase">v2.4</span></div><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Scans Galerie</span></div></div><div class="flex items-center gap-space-xs"><div class="flex items-center p-0.5 rounded-full bg-surface-container shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.06)]"><button class="w-8 h-8 rounded-full flex items-center justify-center text-primary bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.1)] transition-all" title="Hell" type="button"><span class="material-symbols-outlined text-[16px]">light_mode</span></button><button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-all" title="Dunkel" type="button"><span class="material-symbols-outlined text-[16px]">dark_mode</span></button><button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-all" title="Auto" type="button"><span class="material-symbols-outlined text-[16px]">hdr_auto</span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full px-margin pt-16 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full pb-10">
+<!-- Search Bar with Sunken Tactile Input -->
+<div class="relative w-full mb-space-md">
+<div class="flex items-center w-full px-space-md py-space-sm bg-surface-container rounded-xl shadow-[inset_0_2px_4px_rgba(28,28,24,0.08)]">
+<span class="material-symbols-outlined text-outline text-[20px] mr-space-sm select-none">search</span>
+<input class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none" id="scan-search-input" placeholder="Scans, Tags oder Chunks filtern..." type="search"/>
+<button aria-label="Filteroptionen öffnen" class="p-1 rounded-lg bg-surface text-on-surface-variant shadow-[0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] active:shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.15)] active:translate-y-px transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Filter Chips (Tactile Pills) -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 mb-space-lg no-scrollbar -mx-margin px-margin">
+<button class="filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-hud text-label-hud shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1.5px_0_rgba(255,255,255,0.4)] transition-all" type="button">
+      Alle (6)
+    </button>
+<button class="filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-hud text-label-hud shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)] active:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.12)] transition-all" type="button">
+      Räume &amp; Architektur
+    </button>
+<button class="filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-hud text-label-hud shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)] active:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.12)] transition-all" type="button">
+      Objekte
+    </button>
+<button class="filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-hud text-label-hud shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)] active:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.12)] transition-all" type="button">
+      ★ Favoriten
+    </button>
+<button class="filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-hud text-label-hud shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)] active:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.12)] transition-all" type="button">
+      Exportiert
+    </button>
+</div>
+<!-- Physical Storage & Diagnostic Status Well -->
+<div class="relative w-full mb-space-lg p-space-md rounded-xl bg-surface-container-low shadow-[0_2px_6px_rgba(28,28,24,0.04),inset_0_1.5px_0_rgba(255,255,255,0.8)] overflow-hidden">
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.08)]">
+<span class="material-symbols-outlined text-[18px]">memory</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">LiDAR Voxel-Speicher</span>
+<span class="font-label-hud text-label-hud text-on-surface-variant">6 Projekte aktiv • TSDF Ok</span>
+</div>
+</div>
+<span class="font-label-numeric text-label-numeric px-2 py-0.5 rounded-full bg-surface text-primary shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+        38.4 MB
+      </span>
+</div>
+<!-- Micro-ruled gauge slider -->
+<div class="w-full h-2 rounded-full bg-surface-container shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.15)] relative overflow-hidden mb-space-xs">
+<div class="h-full bg-primary rounded-full transition-all" style="width: 28%;"></div>
+</div>
+<div class="flex items-center justify-between text-outline">
+<div class="flex items-center gap-1 font-label-hud text-label-hud truncate max-w-[80%]">
+<span class="material-symbols-outlined text-[13px] text-tertiary">folder_open</span>
+<span class="truncate">/com.voxelscan.android/files/voxels</span>
+</div>
+<span class="font-label-hud text-label-hud text-on-surface-variant shrink-0">128 MB Kontingent</span>
+</div>
+</div>
+<!-- Saved Scan Cards Stack -->
+<div class="flex flex-col gap-space-lg w-full mb-6">
+<!-- CARD 1: Wohnzimmer Ostwand -->
+<article class="scan-card flex flex-col w-full rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(28,28,24,0.07),inset_0_1.5px_0_rgba(255,255,255,0.9)] overflow-hidden transition-transform duration-200 active:scale-[0.99]">
+<!-- Viewport Graphic Canvas -->
+<div class="relative w-full h-44 bg-surface-container-high overflow-hidden flex items-center justify-center">
+<!-- Isometric dot matrix grid background -->
+<svg class="absolute inset-0 w-full h-full opacity-40 text-outline-variant" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="16" id="iso-dots-1" patternunits="userSpaceOnUse" width="16">
+<circle cx="8" cy="8" fill="currentColor" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#iso-dots-1)" height="100%" width="100%"></rect>
+</svg>
+<!-- Dynamic Isometric Voxel Cluster SVG (Wohnzimmer Ostwand) -->
+<svg class="relative z-10 w-48 h-36 drop-shadow-[0_8px_14px_rgba(0,105,84,0.18)]" fill="none" viewbox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+<!-- Room Floor Base Layer -->
+<polygon fill="#E5E2DB" points="100,120 155,90 100,60 45,90"></polygon>
+<polygon fill="#DCDAD3" points="45,90 100,120 100,128 45,98"></polygon>
+<polygon fill="#BDC9C3" points="100,120 155,90 155,98 100,128"></polygon>
+<!-- Voxel Blocks Column A (Jade / Emerald) -->
+<polygon fill="#1D836C" points="75,85 100,70 100,52 75,67"></polygon>
+<polygon fill="#006954" points="100,70 125,85 125,67 100,52"></polygon>
+<polygon fill="#7CD7BC" points="75,67 100,52 125,67 100,82"></polygon>
+<!-- Voxel Accent Blocks (Amber / Coral) -->
+<polygon fill="#FD9754" points="90,55 115,40 115,25 90,40"></polygon>
+<polygon fill="#984805" points="115,40 140,55 140,40 115,25"></polygon>
+<polygon fill="#FFDBC8" points="90,40 115,25 140,40 115,55"></polygon>
+<!-- LiDAR Coordinate Overlay Callouts -->
+<circle cx="100" cy="52" fill="#1D836C" r="3"></circle>
+<line stroke="#006954" stroke-dasharray="2 2" stroke-width="1.2" x1="100" x2="135" y1="52" y2="30"></line>
+</svg>
+<!-- Floating Chip Badges in Viewport -->
+<div class="absolute top-space-sm left-space-sm flex items-center gap-1.5">
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            TSDF STABIL
+          </span>
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-secondary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            0.05m Raster
+          </span>
+</div>
+<button aria-label="Favorit umschalten" class="absolute top-space-sm right-space-sm w-8 h-8 rounded-full bg-surface/90 backdrop-blur-md text-secondary-container flex items-center justify-center shadow-[0_1px_3px_rgba(0,0,0,0.12)]" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<div class="absolute bottom-space-xs right-space-sm font-label-numeric text-label-hud text-on-surface-variant bg-surface/85 px-1.5 py-0.5 rounded">
+          94% Konfidenz
+        </div>
+</div>
+<!-- Card Body Content -->
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Wohnzimmer Ostwand</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Heute, 14:22 Uhr • 14 Chunks synchronisiert</span>
+</div>
+<button aria-label="Aktionen für Wohnzimmer Ostwand" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Technical Telemetry Pill Grid -->
+<div class="grid grid-cols-3 gap-space-xs py-space-xs px-space-sm rounded-xl bg-surface-container-low shadow-[inset_0_1.5px_2px_rgba(28,28,24,0.05)]">
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Voxels</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">2.840 <span class="text-outline text-label-hud">/ 3k</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Volumen</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">1.42 m³</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Formate</span>
+<span class="font-label-numeric text-label-numeric text-primary">JSON • VOX</span>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-2 px-space-md rounded-xl bg-primary text-on-primary font-headline-sm text-body-md flex items-center justify-center gap-1.5 shadow-[0_3px_0_#005141,0_6px_12px_rgba(0,105,84,0.25),inset_0_1.5px_0_rgba(255,255,255,0.3)] active:translate-y-0.5 active:shadow-[0_1px_0_#005141] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+<span>In AR öffnen</span>
+</button>
+<button class="py-2 px-3 rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-sm text-body-md flex items-center justify-center gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] active:translate-y-0.5 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span class="font-label-hud text-label-hud">Export</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 2: Designer Drehstuhl -->
+<article class="scan-card flex flex-col w-full rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(28,28,24,0.07),inset_0_1.5px_0_rgba(255,255,255,0.9)] overflow-hidden transition-transform duration-200 active:scale-[0.99]">
+<div class="relative w-full h-44 bg-surface-container-high overflow-hidden flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-40 text-outline-variant" height="100%" width="100%">
+<defs>
+<pattern height="16" id="iso-dots-2" patternunits="userSpaceOnUse" width="16">
+<circle cx="8" cy="8" fill="currentColor" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#iso-dots-2)" height="100%" width="100%"></rect>
+</svg>
+<!-- Chair Voxel Isometric Silhouette -->
+<svg class="relative z-10 w-44 h-36 drop-shadow-[0_8px_12px_rgba(152,72,5,0.18)]" fill="none" viewbox="0 0 200 150">
+<!-- Central Pillar & Base -->
+<polygon fill="#DCDAD3" points="100,125 120,113 100,102 80,113"></polygon>
+<polygon fill="#6E7A75" points="96,102 104,102 104,80 96,80"></polygon>
+<!-- Seat Cushion -->
+<polygon fill="#FD9754" points="100,82 135,62 100,42 65,62"></polygon>
+<polygon fill="#984805" points="65,62 100,82 100,89 65,69"></polygon>
+<polygon fill="#6F3200" points="100,82 135,62 135,69 100,89"></polygon>
+<!-- Backrest Voxels -->
+<polygon fill="#1D836C" points="75,56 100,42 100,18 75,32"></polygon>
+<polygon fill="#006954" points="100,42 125,56 125,32 100,18"></polygon>
+<polygon fill="#7CD7BC" points="75,32 100,18 125,32 100,46"></polygon>
+</svg>
+<div class="absolute top-space-sm left-space-sm flex items-center gap-1.5">
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-secondary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            0.02m Feinraster
+          </span>
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            16-Farb Quant
+          </span>
+</div>
+<button aria-label="Favorit umschalten" class="absolute top-space-sm right-space-sm w-8 h-8 rounded-full bg-surface/90 backdrop-blur-md text-outline flex items-center justify-center shadow-[0_1px_3px_rgba(0,0,0,0.12)]" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<div class="absolute bottom-space-xs right-space-sm font-label-numeric text-label-hud text-on-surface-variant bg-surface/85 px-1.5 py-0.5 rounded">
+          89% Konfidenz
+        </div>
+</div>
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Designer Drehstuhl</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gestern, 18:05 Uhr • 8 Chunks</span>
+</div>
+<button aria-label="Aktionen für Designer Drehstuhl" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-space-xs py-space-xs px-space-sm rounded-xl bg-surface-container-low shadow-[inset_0_1.5px_2px_rgba(28,28,24,0.05)]">
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Voxels</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">1.190 <span class="text-outline text-label-hud">/ 2k</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Bounding</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">65x70cm</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Status</span>
+<span class="font-label-numeric text-label-numeric text-secondary">Isoliert</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-2 px-space-md rounded-xl bg-primary text-on-primary font-headline-sm text-body-md flex items-center justify-center gap-1.5 shadow-[0_3px_0_#005141,0_6px_12px_rgba(0,105,84,0.25),inset_0_1.5px_0_rgba(255,255,255,0.3)] active:translate-y-0.5 active:shadow-[0_1px_0_#005141] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+<span>In AR öffnen</span>
+</button>
+<button class="py-2 px-3 rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-sm text-body-md flex items-center justify-center gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] active:translate-y-0.5 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span class="font-label-hud text-label-hud">Export</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 3: Kaffeemaschine Espresso -->
+<article class="scan-card flex flex-col w-full rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(28,28,24,0.07),inset_0_1.5px_0_rgba(255,255,255,0.9)] overflow-hidden transition-transform duration-200 active:scale-[0.99]">
+<div class="relative w-full h-44 bg-surface-container-high overflow-hidden flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-40 text-outline-variant" height="100%" width="100%">
+<defs>
+<pattern height="16" id="iso-dots-3" patternunits="userSpaceOnUse" width="16">
+<circle cx="8" cy="8" fill="currentColor" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#iso-dots-3)" height="100%" width="100%"></rect>
+</svg>
+<!-- Espresso Machine Isometric Graphic -->
+<svg class="relative z-10 w-40 h-32 drop-shadow-[0_6px_10px_rgba(0,105,84,0.2)]" fill="none" viewbox="0 0 160 140">
+<!-- Main Body Cube -->
+<polygon fill="#39816A" points="80,95 120,72 80,49 40,72"></polygon>
+<polygon fill="#1B6852" points="40,72 80,95 80,118 40,95"></polygon>
+<polygon fill="#00513E" points="80,95 120,72 120,95 80,118"></polygon>
+<!-- Group Head Portafilter & Steam Spout -->
+<polygon fill="#FFDBC8" points="68,58 92,44 80,37 56,51"></polygon>
+<circle cx="80" cy="72" fill="#FD9754" r="4"></circle>
+<line stroke="#984805" stroke-linecap="round" stroke-width="2" x1="80" x2="80" y1="76" y2="86"></line>
+</svg>
+<div class="absolute top-space-sm left-space-sm flex items-center gap-1.5">
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            0.02m Feinraster
+          </span>
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-tertiary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            4 Chunks
+          </span>
+</div>
+<button aria-label="Favorit umschalten" class="absolute top-space-sm right-space-sm w-8 h-8 rounded-full bg-surface/90 backdrop-blur-md text-secondary-container flex items-center justify-center shadow-[0_1px_3px_rgba(0,0,0,0.12)]" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<div class="absolute bottom-space-xs right-space-sm font-label-numeric text-label-hud text-primary bg-surface/85 px-1.5 py-0.5 rounded">
+          96% Konfidenz
+        </div>
+</div>
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Kaffeemaschine Espresso</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">04. Okt, 09:14 Uhr • Hochpräzision</span>
+</div>
+<button aria-label="Aktionen für Kaffeemaschine Espresso" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-space-xs py-space-xs px-space-sm rounded-xl bg-surface-container-low shadow-[inset_0_1.5px_2px_rgba(28,28,24,0.05)]">
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Voxels</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">640 <span class="text-outline text-label-hud">/ 1k</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Dichte</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">Dicht</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">LiDAR Rausch</span>
+<span class="font-label-numeric text-label-numeric text-primary">Minimiert</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-2 px-space-md rounded-xl bg-primary text-on-primary font-headline-sm text-body-md flex items-center justify-center gap-1.5 shadow-[0_3px_0_#005141,0_6px_12px_rgba(0,105,84,0.25),inset_0_1.5px_0_rgba(255,255,255,0.3)] active:translate-y-0.5 active:shadow-[0_1px_0_#005141] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+<span>In AR öffnen</span>
+</button>
+<button class="py-2 px-3 rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-sm text-body-md flex items-center justify-center gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] active:translate-y-0.5 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span class="font-label-hud text-label-hud">Export</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 4: Büro Schreibtisch & Setup -->
+<article class="scan-card flex flex-col w-full rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(28,28,24,0.07),inset_0_1.5px_0_rgba(255,255,255,0.9)] overflow-hidden transition-transform duration-200 active:scale-[0.99]">
+<div class="relative w-full h-44 bg-surface-container-high overflow-hidden flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full opacity-40 text-outline-variant" height="100%" width="100%">
+<defs>
+<pattern height="16" id="iso-dots-4" patternunits="userSpaceOnUse" width="16">
+<circle cx="8" cy="8" fill="currentColor" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#iso-dots-4)" height="100%" width="100%"></rect>
+</svg>
+<!-- Desk & Monitor Setup Isometric Model -->
+<svg class="relative z-10 w-48 h-36 drop-shadow-[0_8px_14px_rgba(28,28,24,0.15)]" fill="none" viewbox="0 0 200 150">
+<!-- Table Surface -->
+<polygon fill="#E5E2DB" points="100,100 160,65 100,30 40,65"></polygon>
+<polygon fill="#BDC9C3" points="40,65 100,100 100,106 40,71"></polygon>
+<polygon fill="#6E7A75" points="100,100 160,65 160,71 100,106"></polygon>
+<!-- Screen Voxels -->
+<polygon fill="#006954" points="95,50 125,32 125,12 95,30"></polygon>
+<polygon fill="#1D836C" points="125,32 135,38 135,18 125,12"></polygon>
+<polygon fill="#7CD7BC" points="95,30 125,12 135,18 105,36"></polygon>
+<!-- Accessories & Lamp Orange Voxel -->
+<polygon fill="#FD9754" points="65,58 75,52 75,44 65,50"></polygon>
+<polygon fill="#984805" points="75,52 85,58 85,50 75,44"></polygon>
+</svg>
+<div class="absolute top-space-sm left-space-sm flex items-center gap-1.5">
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-primary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            Snap-Floor aktiv
+          </span>
+<span class="font-label-hud text-label-hud px-2 py-0.5 rounded-full bg-surface/90 backdrop-blur-md text-secondary shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+            0.05m Raster
+          </span>
+</div>
+<button aria-label="Favorit umschalten" class="absolute top-space-sm right-space-sm w-8 h-8 rounded-full bg-surface/90 backdrop-blur-md text-outline flex items-center justify-center shadow-[0_1px_3px_rgba(0,0,0,0.12)]" type="button">
+<span class="material-symbols-outlined text-[18px]">star</span>
+</button>
+<div class="absolute bottom-space-xs right-space-sm font-label-numeric text-label-hud text-on-surface-variant bg-surface/85 px-1.5 py-0.5 rounded">
+          88% Konfidenz
+        </div>
+</div>
+<div class="p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Büro Schreibtisch &amp; Setup</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">28. Sep, 16:48 Uhr • Boden geerdet</span>
+</div>
+<button aria-label="Aktionen für Büro Schreibtisch" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-space-xs py-space-xs px-space-sm rounded-xl bg-surface-container-low shadow-[inset_0_1.5px_2px_rgba(28,28,24,0.05)]">
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Voxels</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">2.980 <span class="text-outline text-label-hud">/ 3k</span></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Ebenen</span>
+<span class="font-label-numeric text-label-numeric text-on-surface">3 Planes</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-hud text-label-hud text-outline uppercase">Format</span>
+<span class="font-label-numeric text-label-numeric text-primary">VOX Sync</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-2 px-space-md rounded-xl bg-primary text-on-primary font-headline-sm text-body-md flex items-center justify-center gap-1.5 shadow-[0_3px_0_#005141,0_6px_12px_rgba(0,105,84,0.25),inset_0_1.5px_0_rgba(255,255,255,0.3)] active:translate-y-0.5 active:shadow-[0_1px_0_#005141] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+<span>In AR öffnen</span>
+</button>
+<button class="py-2 px-3 rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-sm text-body-md flex items-center justify-center gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] active:translate-y-0.5 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span class="font-label-hud text-label-hud">Export</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Prominent Tactile Scan Trigger Banner (Above Floating Nav) -->
+<div class="relative w-full p-1 bg-surface-container-high rounded-2xl shadow-[inset_0_2px_4px_rgba(28,28,24,0.08)] mt-2">
+<button class="group w-full py-3.5 px-space-lg rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-between shadow-[0_4px_0_#005141,0_10px_20px_rgba(0,105,84,0.3),inset_0_1.5px_0_rgba(255,255,255,0.4)] active:translate-y-1 active:shadow-[0_1px_0_#005141] transition-all" id="start-ar-scan-cta" type="button">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+<span class="material-symbols-outlined text-[24px]">photo_camera</span>
+</div>
+<div class="flex flex-col items-start text-left">
+<span class="tracking-tight">Neuen AR-Scan starten</span>
+<span class="font-label-hud text-label-hud text-primary-fixed opacity-90">LiDAR Sensor betriebsbereit</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</div>
+</button>
+</div>
+</div>
+<script>
+  // Filter chips active state toggling
+  const chips = document.querySelectorAll('.filter-chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => {
+        c.className = 'filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-hud text-label-hud shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)] active:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.12)] transition-all';
+      });
+      chip.className = 'filter-chip whitespace-nowrap px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-hud text-label-hud shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1.5px_0_rgba(255,255,255,0.4)] transition-all';
+    });
+  });
+
+  // Client-side quick search filtering
+  const searchInput = document.getElementById('scan-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.scan-card');
+      cards.forEach(card => {
+        const title = card.querySelector('h2')?.textContent.toLowerCase() || '';
+        const bodyText = card.textContent.toLowerCase();
+        if (title.includes(query) || bodyText.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+</script></main><nav class="fixed bottom-3 inset-x-margin z-50 pb-safe" data-active-classes="bg-primary-container text-on-primary-container shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1.5px_0_rgba(255,255,255,0.35)]"><div class="bg-surface/90 backdrop-blur-xl tactile-dock rounded-full px-space-sm py-1.5 flex items-center justify-between gap-1"><a aria-current="page" class="flex-1 flex flex-col items-center justify-center py-1.5 px-2 rounded-full transition-all min-h-[44px] bg-primary-container text-on-primary-container shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1.5px_0_rgba(255,255,255,0.35)]" data-path="scans-galerie" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-label-hud text-label-hud tracking-normal mt-0.5">Galerie</span></a><a class="flex-1 flex flex-col items-center justify-center py-1.5 px-2 rounded-full text-on-surface-variant hover:text-on-surface transition-all min-h-[44px]" data-path="neuer-ar-scan" href="#"><span class="material-symbols-outlined text-[20px]">view_in_ar</span><span class="font-label-hud text-label-hud tracking-normal mt-0.5">Neuer Scan</span></a><a class="flex-1 flex flex-col items-center justify-center py-1.5 px-2 rounded-full text-on-surface-variant hover:text-on-surface transition-all min-h-[44px]" data-path="einstellungen" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-label-hud text-label-hud tracking-normal mt-0.5">Einstellungen</span></a></div></nav><script src="./js/app.js"></script></body></html>

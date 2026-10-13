@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#006954">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>VoxelScan AR - PWA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body { font-family: var(--font-body); margin: 0; background: #0b0e11; color: #fff; }
+    .container { max-width: 420px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+    .btn { background: #34aa8d; color: #fff; padding: 16px 24px; border-radius: 12px; margin: 8px; text-decoration: none; display: block; width: 100%; text-align: center; box-shadow: 0 8px 24px rgba(52,170,141,0.4); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="margin-bottom: 32px;">VoxelScan AR</h1>
+    <a href="index.html" class="btn">Splashscreen</a>
+    <a href="live-scan.html" class="btn">Live Scan (Kontrollen)</a>
+    <a href="immersive.html" class="btn">Immersive Live Scan</a>
+    <a href="mesh-snap.html" class="btn">Mesh & Snap</a>
+    <a href="parameter-export.html" class="btn">Parameter & Export</a>
+    <a href="einstellungen-info.html" class="btn">Einstellungen & Info</a>
+    <a href="galerie-projekte.html" class="btn">Galerie & Projekte</a>
+  </div>
+  <script src="./js/app.js"></script>
+</body>
+</html>

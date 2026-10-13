@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="__arcore_cancel">取消</string>
+    <string name="__arcore_continue">继续</string>
+    <string name="__arcore_install_app">需要安装最新版本的“面向 AR 的 Google Play 服务”才能使用此应用。</string>
+    <string name="__arcore_install_feature">需要安装最新版本的“面向 AR 的 Google Play 服务”才能使用此功能。</string>
+    <string name="__arcore_installing">正在安装“面向 AR 的 Google Play 服务”…</string>
+    <string name="call_notification_answer_action">接听</string>
+    <string name="call_notification_answer_video_action">视频通话</string>
+    <string name="call_notification_decline_action">拒接</string>
+    <string name="call_notification_hang_up_action">挂断</string>
+    <string name="call_notification_incoming_text">来电</string>
+    <string name="call_notification_ongoing_text">正在通话</string>
+    <string name="call_notification_screening_text">正在过滤来电</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+</resources>
