@@ -815,6 +815,10 @@
       opacity: 1;
     }
   </style>
+  <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.158.0/examples/jsm/webxr/ARButton.js" type="module"></script>
+  <script type="module" src="./js/voxelscan-core.js"></script>
+  <script src="./js/voxelscan.js"></script>
 </head>
 <body>
 <div class="viewport-root">
@@ -1248,4 +1252,46 @@
 
     })();
   </script>
-<script src="./js/app.js"></script></body></html>
+<script src="./js/app.js"></script>
+<script>
+function setupImmersiveControls() {
+  const btnRec = document.getElementById('btnRecAction');
+  const btnPause = document.getElementById('btnPauseAction');
+  const btnStop = document.getElementById('btnStopAction');
+  const txtPauseLabel = document.getElementById('txtPauseLabel');
+  
+  if (btnRec) {
+    btnRec.addEventListener('click', () => {
+      if (window.voxelScanCore) window.voxelScanCore.startScan();
+      if (txtPauseLabel) txtPauseLabel.textContent = 'Pause';
+      if (btnPause) btnPause.classList.remove('is-paused');
+    });
+  }
+  if (btnPause) {
+    btnPause.addEventListener('click', () => {
+      if (window.voxelScanCore) window.voxelScanCore.pauseScan();
+      if (window.voxelScanCore && window.voxelScanCore.isPaused) {
+        if (txtPauseLabel) txtPauseLabel.textContent = 'Fortsetzen';
+        btnPause.classList.add('is-paused');
+      } else {
+        if (txtPauseLabel) txtPauseLabel.textContent = 'Pause';
+        btnPause.classList.remove('is-paused');
+      }
+    });
+  }
+  if (btnStop) {
+    btnStop.addEventListener('click', () => {
+      if (window.voxelScanCore) window.voxelScanCore.stopScan();
+      if (txtPauseLabel) txtPauseLabel.textContent = 'Pause';
+      if (btnPause) btnPause.classList.remove('is-paused');
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.voxelScanCore = new VoxelScanCore();
+  setupImmersiveControls();
+});
+</script>
+
+</body></html>

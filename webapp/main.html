@@ -1,35 +1,44 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="system">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#006954">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>VoxelScan AR - PWA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <style>
     :root {
       --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    body { font-family: var(--font-body); margin: 0; background: #0b0e11; color: #fff; }
-    .container { max-width: 420px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-    .btn { background: #34aa8d; color: #fff; padding: 16px 24px; border-radius: 12px; margin: 8px; text-decoration: none; display: block; width: 100%; text-align: center; box-shadow: 0 8px 24px rgba(52,170,141,0.4); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: radial-gradient(circle at 50% 32%, #182d27 0%, #0d1617 65%, #080d0e 100%); color: #f5f7fa; min-height: 100vh; padding: 20px; }
+    .container { max-width: 420px; margin: 0 auto; }
+    h1 { text-align: center; margin: 24px 0; font-size: 28px; letter-spacing: -0.02em; }
+    h1 span { color: #2ecc71; }
+    .card { background: rgba(22, 27, 33, 0.94); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); }
+    .btn { display: block; padding: 14px 16px; background: linear-gradient(180deg, #34aa8d 0%, #1d836c 100%); color: #fff; text-decoration: none; border-radius: 12px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 8px 24px rgba(52,170,141,0.4); }
+    .btn.secondary { background: linear-gradient(180deg, #3b4b59 0%, #2a343f 100%); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .status { text-align: center; padding: 12px; color: #9ba4b0; font-size: 14px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 style="margin-bottom: 32px;">VoxelScan AR</h1>
-    <a href="index.html" class="btn">Splashscreen</a>
-    <a href="live-scan.html" class="btn">Live Scan (Kontrollen)</a>
-    <a href="immersive.html" class="btn">Immersive Live Scan</a>
-    <a href="mesh-snap.html" class="btn">Mesh & Snap</a>
-    <a href="parameter-export.html" class="btn">Parameter & Export</a>
-    <a href="einstellungen-info.html" class="btn">Einstellungen & Info</a>
-    <a href="galerie-projekte.html" class="btn">Galerie & Projekte</a>
+    <h1>VoxelScan<span>.AR</span></h1>
+    <div class="status">PWA Version - Ready for Deployment</div>
+    <div class="card">
+      <a href="immersive.html" class="btn">🔍 Immersive Live Scan</a>
+      <a href="live-scan.html" class="btn secondary">🎮 Live Scan Controls</a>
+      <a href="mesh-snap.html" class="btn secondary">📐 Mesh & Snap</a>
+      <a href="parameter-export.html" class="btn secondary">⚙️ Parameter & Export</a>
+    </div>
+    <div class="card">
+      <a href="galerie-projekte.html" class="btn secondary">🖼️ Galerie & Projekte</a>
+      <a href="einstellungen-info.html" class="btn secondary">ℹ️ Einstellungen & Info</a>
+    </div>
   </div>
   <script src="./js/app.js"></script>
 </body>
