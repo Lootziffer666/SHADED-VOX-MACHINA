@@ -2,6 +2,7 @@ package com.voxelscan.android.scanner
 
 import java.nio.ByteBuffer
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -31,6 +32,16 @@ class DepthImageMathTest {
 
         assertEquals(0x1234, DepthImageMath.readUnsignedLittleEndian16(buffer, 0))
         assertEquals(65535, DepthImageMath.readUnsignedLittleEndian16(buffer, 2))
+    }
+
+    @Test
+    fun denseDepthAcceptsOnlyConfiguredScanRange() {
+        assertFalse(DepthImageMath.isUsableDenseDepth(0))
+        assertFalse(DepthImageMath.isUsableDenseDepth(99))
+        assertTrue(DepthImageMath.isUsableDenseDepth(100))
+        assertTrue(DepthImageMath.isUsableDenseDepth(2500))
+        assertTrue(DepthImageMath.isUsableDenseDepth(5000))
+        assertFalse(DepthImageMath.isUsableDenseDepth(5001))
     }
 
     @Test

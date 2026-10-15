@@ -9,25 +9,28 @@ enum class ScannerRuntimeState {
     ERROR
 }
 
-/** A real world-space point derived from an ARCore raw-depth sample. */
+/** A real world-space point derived from an ARCore depth sample. */
 data class ScannerPoint(
     val x: Float,
     val y: Float,
     val z: Float,
+    /** Fusion weight byte. Full Depth has no per-pixel confidence, so dense points use 255. */
     val confidence: Int
 )
 
-/** Truthful observability for every boundary in the Phase-1 scan pipeline. */
+/** Truthful observability for every boundary in the scan pipeline. */
 data class ScannerDiagnostics(
     val runtimeState: ScannerRuntimeState = ScannerRuntimeState.IDLE,
     val trackingState: String = "STOPPED",
     val depthSupported: Boolean? = null,
     val depthMode: String = "DISABLED",
+    val depthSource: String = "NONE",
     val depthFrames: Long = 0L,
     val depthFps: Float = 0f,
     val depthWidth: Int = 0,
     val depthHeight: Int = 0,
     val validDepthSamples: Int = 0,
+    val confidenceAvailable: Boolean = false,
     val confidenceMin: Int = 0,
     val confidenceAverage: Int = 0,
     val confidenceMax: Int = 0,
