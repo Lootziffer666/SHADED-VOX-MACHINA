@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="voxel_files" path="." />
+    <external-files-path name="voxel_exports" path="." />
+    <cache-path name="voxel_cache" path="." />
+</paths>

@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">VoxelScan AR</string>
+    <string name="app_subtitle">SHADED-VOX-MACHINA</string>
+    <string name="engine_version">VoxelWorld Engine v2.4</string>
+
+    <!-- Navigation -->
+    <string name="nav_scan">Live Scan</string>
+    <string name="nav_gallery">Galerie</string>
+    <string name="nav_mesh">Mesh &amp; Snap</string>
+    <string name="nav_export">Export</string>
+    <string name="nav_settings">Sensoren</string>
+
+    <!-- HUD & Scanner -->
+    <string name="hud_lidar_active">LiDAR AKTIV</string>
+    <string name="hud_lidar_simulated">LiDAR 6DoF</string>
+    <string name="hud_tracking_stable">TRACKING STABIL</string>
+    <string name="hud_voxel_count">Voxels</string>
+    <string name="hud_fps">FPS</string>
+    <string name="hud_memory">Speicher</string>
+    <string name="hud_resolution">Auflösung</string>
+    <string name="btn_start_scan">Scan Starten</string>
+    <string name="btn_pause_scan">Pause</string>
+    <string name="btn_clear_scan">Zurücksetzen</string>
+    <string name="btn_snap_surface">Snap Fläche</string>
+    <string name="btn_shutter">Punkt Erfassen</string>
+
+    <!-- Export & Parameters -->
+    <string name="export_title">Parameter &amp; Export</string>
+    <string name="export_vox">MagicaVoxel (.vox)</string>
+    <string name="export_obj">Wavefront OBJ (.obj + .mtl)</string>
+    <string name="export_ply">Stanford PLY (.ply)</string>
+    <string name="export_xyz">Point Cloud (.xyz / .json)</string>
+    <string name="btn_export_now">Jetzt Exportieren</string>
+    <string name="btn_share_export">Export Teilen</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">Scans Galerie</string>
+    <string name="search_placeholder">Scans, Tags oder Chunks filtern...</string>
+    <string name="filter_all">Alle</string>
+    <string name="filter_rooms">Räume &amp; Architektur</string>
+    <string name="filter_objects">Objekte</string>
+    <string name="filter_favorites">★ Favoriten</string>
+    <string name="filter_exported">Exportiert</string>
+</resources>

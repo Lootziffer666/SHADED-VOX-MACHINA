@@ -1,0 +1,6 @@
+{
+  "name": "VoxelScan AR",
+  "description": "3D AR voxel scanning, point cloud mesh reconstruction, and MagicaVoxel VOX export engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
