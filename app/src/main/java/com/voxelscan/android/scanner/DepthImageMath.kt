@@ -2,11 +2,11 @@ package com.voxelscan.android.scanner
 
 import java.nio.ByteBuffer
 
-/** Pure helpers for decoding ARCore raw-depth buffers and projecting depth pixels. */
+/** Pure helpers for decoding ARCore depth buffers and projecting depth pixels. */
 object DepthImageMath {
     data class CameraPoint(val x: Float, val y: Float, val z: Float)
 
-    /** Convert Kotlin/Java's signed Byte to the unsigned 0..255 value ARCore confidence uses. */
+    /** Convert Kotlin/Java's signed Byte to the unsigned 0..255 value ARCore raw confidence uses. */
     fun unsignedByte(value: Byte): Int = value.toInt() and 0xFF
 
     /** Byte offset of pixel (x,y) in an Android Image plane with arbitrary padding/strides. */
@@ -20,8 +20,12 @@ object DepthImageMath {
         return low or (high shl 8)
     }
 
+    /** Phase-2 scan range. Zero means ARCore has no estimate for that pixel. */
+    fun isUsableDenseDepth(depthMillimetres: Int): Boolean =
+        depthMillimetres in 100..5000
+
     /**
-     * Project a raw-depth pixel to the physical camera coordinate system.
+     * Project a depth pixel to the physical camera coordinate system.
      * ARCore camera coordinates use +X right, +Y up and -Z forward.
      */
     fun depthPixelToCameraPoint(
