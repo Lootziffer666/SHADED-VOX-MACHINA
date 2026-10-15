@@ -16,8 +16,8 @@ android {
     applicationId = "com.aistudio.voxelscan.wrmypq"
     minSdk = 24
     targetSdk = 36
-    versionCode = 1
-    versionName = "1.0"
+    versionCode = 2
+    versionName = "1.1"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -45,7 +45,13 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
     }
-    debug { signingConfig = signingConfigs.getByName("debugConfig") }
+    debug {
+      // Dense-depth phone-test build is intentionally a separate app so it cannot be confused
+      // with the earlier RAW_DEPTH_ONLY APK and does not depend on matching debug signatures.
+      applicationIdSuffix = ".dense"
+      versionNameSuffix = "-dense-auto"
+      signingConfig = signingConfigs.getByName("debugConfig")
+    }
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -97,7 +103,6 @@ dependencies {
   implementation(libs.okhttp)
   implementation(libs.retrofit)
 
-  // Phase-1 real scanner: ARCore camera, tracking and Raw Depth API.
   implementation("com.google.ar:core:1.56.0")
 
   testImplementation(libs.androidx.compose.ui.test.junit4)
