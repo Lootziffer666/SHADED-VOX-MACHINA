@@ -1,16 +1,14 @@
 package com.voxelscan.android.ui.screens
 
-import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,641 +19,337 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.FiberManualRecord
-import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.Layers
-import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.voxelscan.android.data.VoxelRepository
+import com.voxelscan.android.scanner.ArCoreCameraSurface
+import com.voxelscan.android.scanner.ArCoreScannerEngine
+import com.voxelscan.android.scanner.ScannerRuntimeState
 import com.voxelscan.android.telemetry.SensorTelemetry
 import com.voxelscan.android.ui.components.VoxelCanvas3D
 import com.voxelscan.android.ui.components.VoxelColorMode
 import com.voxelscan.android.ui.components.VoxelRenderMode
 import com.voxelscan.android.ui.theme.VoxelAmber
-import com.voxelscan.android.ui.theme.VoxelCoral
-import com.voxelscan.android.ui.theme.VoxelCyanGlow
-import com.voxelscan.android.ui.theme.VoxelDarkBackground
-import com.voxelscan.android.ui.theme.VoxelDarkSurfaceBorder
-import com.voxelscan.android.ui.theme.VoxelDarkSurfaceContainer
 import com.voxelscan.android.ui.theme.VoxelJadePrimary
 import com.voxelscan.android.ui.theme.VoxelLaserGreen
 import com.voxelscan.android.ui.theme.VoxelMintLight
 import com.voxelscan.android.ui.theme.VoxelMintPeak
-import kotlinx.coroutines.delay
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Phase-1 Live Scan: real ARCore camera + Raw Depth only.
+ *
+ * The previous sine/cosine/random point generator has deliberately been removed from the
+ * production scan path. If ARCore or depth fails, the HUD exposes the failed boundary instead of
+ * substituting synthetic geometry.
+ */
 @Composable
 fun LiveScanScreen(
     repository: VoxelRepository,
-    telemetry: SensorTelemetry,
+    @Suppress("UNUSED_PARAMETER") telemetry: SensorTelemetry,
     onOpenMeshSheet: () -> Unit,
     onOpenExportSheet: () -> Unit
 ) {
     val context = LocalContext.current
+    val activity = remember(context) { context.findActivity() }
+
+    if (activity == null) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("ARCore host Activity unavailable", color = Color.White)
+        }
+        return
+    }
+
+    val engine = remember(activity) { ArCoreScannerEngine(activity) }
+    val cameraSurface = remember(engine) { ArCoreCameraSurface(context, engine) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    var hasCameraPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_GRANTED
+        )
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        hasCameraPermission = granted
+        if (!granted) engine.markCameraPermissionMissing()
+    }
+
+    val diagnostics by engine.diagnostics.collectAsState()
     val isScanning by repository.isScanning.collectAsState()
-    val telemetryState by telemetry.state.collectAsState()
+    val currentScanning by rememberUpdatedState(isScanning)
+    var worldTick by remember { mutableIntStateOf(0) }
 
-    var renderMode by remember { mutableStateOf(VoxelRenderMode.CUBES) }
-    var colorMode by remember { mutableStateOf(VoxelColorMode.TRUE_RGB) }
-    var sliceFraction by remember { mutableFloatStateOf(1.0f) }
-    var showSliceSlider by remember { mutableStateOf(false) }
+    SideEffect {
+        engine.captureEnabled = isScanning
+    }
 
-    var selectedResolutionIndex by remember { mutableIntStateOf(2) } // 5cm default
-    val resolutions = remember { listOf(0.01f, 0.02f, 0.05f, 0.10f) }
-    val resolutionLabels = remember { listOf("1cm", "2cm", "5cm", "10cm") }
+    // Correct lifecycle ordering: resume Session before GL surface; pause GL surface before Session.
+    DisposableEffect(lifecycleOwner, hasCameraPermission, engine, cameraSurface) {
+        val lifecycle = lifecycleOwner.lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    if (hasCameraPermission) {
+                        engine.resume()
+                        cameraSurface.onResume()
+                    } else {
+                        engine.markCameraPermissionMissing()
+                    }
+                }
+                Lifecycle.Event.ON_PAUSE -> {
+                    cameraSurface.onPause()
+                    engine.pause()
+                }
+                else -> Unit
+            }
+        }
+        lifecycle.addObserver(observer)
 
-    var saveDialogOpen by remember { mutableStateOf(false) }
-    var saveTitleInput by remember { mutableStateOf("") }
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            if (hasCameraPermission) {
+                engine.resume()
+                cameraSurface.onResume()
+            } else {
+                engine.markCameraPermissionMissing()
+            }
+        }
 
-    var updateTick by remember { mutableIntStateOf(0) }
+        onDispose {
+            cameraSurface.onPause()
+            engine.pause()
+            lifecycle.removeObserver(observer)
+        }
+    }
 
-    // Real-time scan point generation loop when scanning is active
-    LaunchedEffect(isScanning) {
-        if (!isScanning) return@LaunchedEffect
-        var timeSec = 0f
-        var frame = 0L
-        while (isScanning) {
-            delay(40) // ~25-30 depth frames per second
-            timeSec += 0.04f
-            frame++
+    DisposableEffect(engine) {
+        onDispose { engine.destroy() }
+    }
 
-            val sample = telemetry.sampleArDepthHit(timeSec)
-            repository.activeWorld.addPoint(
-                worldX = sample.x,
-                worldY = sample.y,
-                worldZ = sample.z,
-                r = sample.r,
-                g = sample.g,
-                b = sample.b,
-                frameId = frame
-            )
-
-            // Periodic free-space ray carving
-            if (frame % 3L == 0L) {
-                repository.activeWorld.carveRay(
-                    cameraX = 0f,
-                    cameraY = 0f,
-                    cameraZ = -0.5f,
-                    hitX = sample.x,
-                    hitY = sample.y,
-                    hitZ = sample.z,
-                    frameId = frame
+    // Real ARCore world-space points enter the existing VoxelWorld here.
+    LaunchedEffect(engine) {
+        var frameId = 0L
+        engine.pointBatches.collect { batch ->
+            if (!currentScanning) return@collect
+            frameId++
+            batch.forEach { point ->
+                repository.activeWorld.addPoint(
+                    worldX = point.x,
+                    worldY = point.y,
+                    worldZ = point.z,
+                    r = 46,
+                    g = 236,
+                    b = 188,
+                    weight = (point.confidence / 255f).coerceAtLeast(0.13f),
+                    frameId = frameId
                 )
             }
-            updateTick++
+            worldTick++
         }
     }
 
-    // Capture single burst
-    fun captureBurst() {
-        val baseTime = System.currentTimeMillis() / 1000f
-        for (i in 0..12) {
-            val sample = telemetry.sampleArDepthHit(baseTime + (i * 0.15f))
-            repository.activeWorld.addPoint(
-                worldX = sample.x,
-                worldY = sample.y,
-                worldZ = sample.z,
-                r = sample.r,
-                g = sample.g,
-                b = sample.b
-            )
-        }
-        updateTick++
-        Toast.makeText(context, "+13 LiDAR Tiefenpunkte erfasst", Toast.LENGTH_SHORT).show()
-    }
-
-    val entries = remember(updateTick, repository.activeWorld.count()) {
+    val entries = remember(worldTick, repository.activeWorld.count()) {
         repository.activeWorld.entries()
     }
-    val bounds = remember(entries) {
-        repository.activeWorld.calculateBounds(entries)
-    }
 
-    val pulseTransition = rememberInfiniteTransition(label = "recPulse")
-    val recordGlowScale by pulseTransition.animateFloat(
-        initialValue = 1.0f,
-        targetValue = 1.25f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowScale"
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(VoxelDarkBackground)
-    ) {
-        // 3D Viewport
-        VoxelCanvas3D(
-            entries = entries,
-            modifier = Modifier.fillMaxSize(),
-            renderMode = renderMode,
-            colorMode = colorMode,
-            sliceFraction = sliceFraction,
-            initialYaw = 38f,
-            initialPitch = 24f,
-            allowInteraction = true
-        )
-
-        // Holographic Crosshair HUD in Viewport Center
-        Box(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(64.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .border(1.2.dp, VoxelMintLight.copy(alpha = 0.45f), CircleShape)
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .clip(CircleShape)
-                    .background(if (isScanning) VoxelLaserGreen else VoxelCoral)
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+        if (hasCameraPermission) {
+            AndroidView(
+                factory = { cameraSurface },
+                modifier = Modifier.fillMaxSize()
             )
         }
 
-        // Top HUD Overlay
-        Column(
+        if (!hasCameraPermission) {
+            Column(
+                modifier = Modifier.align(Alignment.Center).padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    "Camera permission is required for real ARCore Depth.",
+                    color = Color.White
+                )
+                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text("CAMERA FREIGEBEN")
+                }
+            }
+        }
+
+        // Truthful diagnostic bridge. Every value comes from the live ARCore/depth path.
+        Card(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(10.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xD90A1211))
         ) {
-            // Row 1: Engine status, LiDAR active ping & 6DoF telemetry
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // LiDAR / 6DoF badge
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(VoxelDarkSurfaceContainer.copy(alpha = 0.9f))
-                        .border(1.dp, VoxelDarkSurfaceBorder, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(if (isScanning) VoxelLaserGreen else VoxelAmber)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = if (isScanning) "SCAN AKTIV" else "BEREIT",
-                        color = Color.White,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Monospace
-                    )
-                }
-
-                // 6DoF Gyro readout
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(VoxelDarkSurfaceContainer.copy(alpha = 0.9f))
-                        .border(1.dp, VoxelDarkSurfaceBorder, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = String.format(
-                            Locale.US,
-                            "P:%+.0f° R:%+.0f° Y:%.0f°",
-                            telemetryState.pitchDegrees,
-                            telemetryState.rollDegrees,
-                            telemetryState.yawDegrees
-                        ),
-                        color = VoxelMintLight,
-                        fontSize = 10.sp,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-
-                // FPS & Memory badge
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(VoxelDarkSurfaceContainer.copy(alpha = 0.9f))
-                        .border(1.dp, VoxelDarkSurfaceBorder, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "60 FPS • ${String.format(Locale.US, "%.1f", repository.activeWorld.memoryUsageKB() / 1024f + 32.4f)} MB",
-                        color = Color.LightGray,
-                        fontSize = 10.sp,
-                        fontFamily = FontFamily.Monospace
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Row 2: Tactical Quick Controls Strip (Resolution, View Mode, Color Mode, Slices)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(VoxelDarkSurfaceContainer.copy(alpha = 0.88f))
-                    .border(1.dp, VoxelDarkSurfaceBorder, RoundedCornerShape(14.dp))
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Resolution Selector
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "GRID:",
-                        color = Color.Gray,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(end = 4.dp)
-                    )
-                    resolutionLabels.forEachIndexed { index, label ->
-                        val isSelected = selectedResolutionIndex == index
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(if (isSelected) VoxelJadePrimary else Color.Transparent)
-                                .clickable {
-                                    if (repository.activeWorld.setVoxelSize(resolutions[index])) {
-                                        selectedResolutionIndex = index
-                                    } else {
-                                        Toast.makeText(context, "Auflösung nur bei leerem Scan änderbar", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                                .padding(horizontal = 6.dp, vertical = 3.dp)
-                        ) {
-                            Text(
-                                text = label,
-                                color = if (isSelected) Color.White else Color.LightGray,
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-
-                // View Mode Toggle
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(
-                        onClick = {
-                            renderMode = when (renderMode) {
-                                VoxelRenderMode.CUBES -> VoxelRenderMode.POINTS
-                                VoxelRenderMode.POINTS -> VoxelRenderMode.WIREFRAME
-                                VoxelRenderMode.WIREFRAME -> VoxelRenderMode.CUBES
-                            }
-                        },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.GridView,
-                            contentDescription = "Ansichtsmodus",
-                            tint = when (renderMode) {
-                                VoxelRenderMode.CUBES -> VoxelMintPeak
-                                VoxelRenderMode.POINTS -> VoxelCyanGlow
-                                VoxelRenderMode.WIREFRAME -> VoxelCoral
-                            },
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-
-                    // Color Mode Toggle
-                    IconButton(
-                        onClick = {
-                            colorMode = when (colorMode) {
-                                VoxelColorMode.TRUE_RGB -> VoxelColorMode.HEATMAP
-                                VoxelColorMode.HEATMAP -> VoxelColorMode.PALETTE
-                                VoxelColorMode.PALETTE -> VoxelColorMode.CONFIDENCE
-                                VoxelColorMode.CONFIDENCE -> VoxelColorMode.TRUE_RGB
-                            }
-                        },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Palette,
-                            contentDescription = "Farbmodus",
-                            tint = when (colorMode) {
-                                VoxelColorMode.TRUE_RGB -> VoxelMintLight
-                                VoxelColorMode.HEATMAP -> VoxelCoral
-                                VoxelColorMode.PALETTE -> VoxelAmber
-                                VoxelColorMode.CONFIDENCE -> VoxelLaserGreen
-                            },
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-
-                    // Layer Cutaway Slice Toggle
-                    IconButton(
-                        onClick = { showSliceSlider = !showSliceSlider },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Layers,
-                            contentDescription = "Schichten",
-                            tint = if (showSliceSlider || sliceFraction < 1f) VoxelAmber else Color.Gray,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
-            }
-
-            // Optional Layer Slice Slider
-            AnimatedVisibility(visible = showSliceSlider) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 6.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = VoxelDarkSurfaceContainer)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "SCHICHT: ${(sliceFraction * 100).toInt()}%",
-                            color = VoxelMintLight,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.width(90.dp)
-                        )
-                        Slider(
-                            value = sliceFraction,
-                            onValueChange = { sliceFraction = it },
-                            valueRange = 0.1f..1.0f,
-                            colors = SliderDefaults.colors(
-                                thumbColor = VoxelAmber,
-                                activeTrackColor = VoxelMintLight
-                            ),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Row 3: Bounding Box and Voxel Count Badge
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Black.copy(alpha = 0.6f))
-                    .padding(horizontal = 10.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)) {
                 Text(
-                    text = "${entries.size} Voxels",
-                    color = VoxelMintPeak,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "  |  ${String.format(Locale.US, "%.1f×%.1f×%.1f m", bounds.widthMeters(repository.activeWorld.voxelSize), bounds.heightMeters(repository.activeWorld.voxelSize), bounds.depthMeters(repository.activeWorld.voxelSize))}",
-                    color = Color.LightGray,
-                    fontSize = 11.sp,
-                    fontFamily = FontFamily.Monospace
+                    text = diagnosticText(
+                        diagnostics = diagnostics,
+                        voxelCount = repository.activeWorld.count()
+                    ),
+                    color = VoxelMintLight,
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 10.sp,
+                    lineHeight = 13.sp
                 )
             }
         }
 
-        // Bottom Tactical Scanning Dock
+        // Small independent voxel proof: camera stays visible while real accumulated geometry is
+        // visible too. This intentionally does not pretend to be final AR registration yet.
+        if (entries.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(12.dp)
+                    .size(154.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Color(0xCC07110F))
+                    .border(1.dp, VoxelMintLight.copy(alpha = 0.55f), RoundedCornerShape(14.dp))
+            ) {
+                VoxelCanvas3D(
+                    entries = entries,
+                    modifier = Modifier.fillMaxSize().padding(6.dp),
+                    renderMode = VoxelRenderMode.CUBES,
+                    colorMode = VoxelColorMode.TRUE_RGB,
+                    allowInteraction = true
+                )
+            }
+        }
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                VoxelDarkSurfaceContainer.copy(alpha = 0.95f),
-                                Color(0xFF0D1617)
-                            )
-                        )
-                    )
-                    .border(1.dp, VoxelDarkSurfaceBorder, RoundedCornerShape(28.dp))
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Clear Scan Button
-                IconButton(
+                Button(
+                    onClick = { repository.toggleScanning() },
+                    enabled = hasCameraPermission &&
+                        diagnostics.runtimeState != ScannerRuntimeState.ERROR,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isScanning) VoxelAmber else VoxelJadePrimary
+                    ),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        if (isScanning) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.size(6.dp))
+                    Text(if (isScanning) "PAUSE" else "SCAN")
+                }
+
+                OutlinedButton(
                     onClick = {
-                        val cleared = repository.clearActiveScan()
-                        updateTick++
-                        Toast.makeText(context, "$cleared Voxels zurückgesetzt", Toast.LENGTH_SHORT).show()
-                    },
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.4f))
-                        .testTag("clear_scan_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Zurücksetzen",
-                        tint = Color.LightGray
-                    )
-                }
-
-                // Shutter Point Capture Burst
-                IconButton(
-                    onClick = { captureBurst() },
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.4f))
-                        .testTag("shutter_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "Punkt Erfassen",
-                        tint = VoxelMintLight
-                    )
-                }
-
-                // Central Record / Pause Shutter Button
-                Box(
-                    modifier = Modifier
-                        .size(68.dp)
-                        .testTag("record_toggle_button")
-                        .clickable {
-                            repository.toggleScanning()
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (isScanning) {
-                        Box(
-                            modifier = Modifier
-                                .size(64.dp)
-                                .scale(recordGlowScale)
-                                .border(2.dp, VoxelLaserGreen.copy(alpha = 0.6f), CircleShape)
-                        )
+                        repository.clearActiveScan()
+                        worldTick++
                     }
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (isScanning) Color(0xFFE11D48) else VoxelJadePrimary
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = if (isScanning) Icons.Default.Pause else Icons.Default.PlayArrow,
-                            contentDescription = if (isScanning) "Pause" else "Aufnahme Starten",
-                            tint = Color.White,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
-                }
-
-                // Mesh & Snap Sheet Trigger
-                IconButton(
-                    onClick = onOpenMeshSheet,
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.4f))
-                        .testTag("mesh_snap_button")
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Tune,
-                        contentDescription = "Mesh & Snap",
-                        tint = VoxelAmber
-                    )
+                    Icon(Icons.Default.DeleteSweep, contentDescription = "Scan leeren")
                 }
-
-                // Save Scan to Gallery
-                IconButton(
-                    onClick = {
-                        if (entries.isEmpty()) {
-                            Toast.makeText(context, "Keine Voxels zum Speichern", Toast.LENGTH_SHORT).show()
-                        } else {
-                            saveTitleInput = "Scan #${repository.projects.value.size + 1}"
-                            saveDialogOpen = true
-                        }
-                    },
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.4f))
-                        .testTag("save_scan_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Save,
-                        contentDescription = "Speichern",
-                        tint = VoxelMintPeak
-                    )
+                OutlinedButton(onClick = onOpenMeshSheet) {
+                    Icon(Icons.Default.Tune, contentDescription = "Mesh")
+                }
+                OutlinedButton(onClick = onOpenExportSheet) {
+                    Icon(Icons.Default.FileDownload, contentDescription = "Export")
                 }
             }
+
+            val stateLine = when {
+                isScanning -> "REAL DEPTH CAPTURE • ${(repository.activeWorld.voxelSize * 100).toInt()} cm GRID"
+                diagnostics.lastFrameAcceptedPoints > 0 -> "REAL DEPTH READY • TAP SCAN"
+                else -> "MOVE PHONE SLOWLY • WAITING FOR DEPTH"
+            }
+            Text(
+                text = stateLine,
+                color = if (isScanning) VoxelLaserGreen else VoxelMintPeak,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(Color(0xC9000000), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
         }
     }
+}
 
-    // Save Scan Dialog
-    if (saveDialogOpen) {
-        AlertDialog(
-            onDismissRequest = { saveDialogOpen = false },
-            title = {
-                Text("Scan in Galerie speichern", fontWeight = FontWeight.Bold, color = Color.White)
-            },
-            text = {
-                Column {
-                    Text(
-                        "${entries.size} Voxels erfasst (${resolutionLabels[selectedResolutionIndex]} Grid)",
-                        color = Color.Gray,
-                        fontSize = 13.sp
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    OutlinedTextField(
-                        value = saveTitleInput,
-                        onValueChange = { saveTitleInput = it },
-                        label = { Text("Projektname") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        repository.saveCurrentScanAsProject(saveTitleInput)
-                        saveDialogOpen = false
-                        Toast.makeText(context, "Scan erfolgreich gespeichert!", Toast.LENGTH_SHORT).show()
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = VoxelJadePrimary)
-                ) {
-                    Text("Speichern")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { saveDialogOpen = false }) {
-                    Text("Abbrechen", color = Color.Gray)
-                }
-            },
-            containerColor = VoxelDarkSurfaceContainer
-        )
+private fun diagnosticText(
+    diagnostics: com.voxelscan.android.scanner.ScannerDiagnostics,
+    voxelCount: Int
+): String {
+    val supported = when (diagnostics.depthSupported) {
+        true -> "YES"
+        false -> "NO"
+        null -> "—"
     }
+    val error = diagnostics.lastError ?: "—"
+    return buildString {
+        append("ARCore: ${diagnostics.runtimeState.name} | Tracking: ${diagnostics.trackingState}\n")
+        append("Depth: $supported / ${diagnostics.depthMode} | Frames: ${diagnostics.depthFrames} | ")
+        append(String.format(Locale.US, "%.1f FPS", diagnostics.depthFps))
+        append(" | ${diagnostics.depthWidth}×${diagnostics.depthHeight}\n")
+        append("Valid: ${diagnostics.validDepthSamples} | Conf: ${diagnostics.confidenceMin}/")
+        append("${diagnostics.confidenceAverage}/${diagnostics.confidenceMax} | ")
+        append(">=32: ${diagnostics.confidenceAtLeast32} | >=128: ${diagnostics.confidenceAtLeast128}\n")
+        append("Accepted: ${diagnostics.acceptedPoints} (+${diagnostics.lastFrameAcceptedPoints}) | ")
+        append("Voxels: $voxelCount | NotYet: ${diagnostics.notYetAvailableCount}\n")
+        append("Error: $error")
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

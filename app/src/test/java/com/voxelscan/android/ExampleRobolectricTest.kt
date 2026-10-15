@@ -9,7 +9,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [36])
+// The pinned Robolectric version in the AI Studio conversion cannot provide an SDK 36 sandbox.
+// This smoke test only reads an app resource, so SDK 35 is sufficient and keeps CI meaningful.
+@Config(sdk = [35])
 class ExampleRobolectricTest {
 
   @Test
