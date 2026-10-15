@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Normal permissions -->
     <uses-permission android:name="android.permission.VIBRATE" />
-
-    <!-- Camera permission for live AR scanning -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
@@ -24,6 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VoxelScanAR">
+
+        <!-- ARCore is optional so the shell/gallery can still open on unsupported devices. -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -32,7 +35,6 @@
             android:theme="@style/Theme.VoxelScanAR">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
